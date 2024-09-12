@@ -80,7 +80,7 @@ export function CompaniesFilters(): React.JSX.Element {
       console.log('Item deleted successfully');
       // Optionally refresh the orders list
     } catch (err) {
-      console.log(err.message);
+      console.log("fdfdd");
     } finally {
       setIsDeleting(false);
       setConfirmDeleteOpen(false);
@@ -185,7 +185,7 @@ export function CompaniesFilters(): React.JSX.Element {
       <Dialog open={open} onClose={handleClose}>
         <DialogContent>
           {selectedOrderId !== null && (
-            <OrderDetails orderId={selectedOrderId} onClose={handleClose} />
+            <OrderDetails orderId={selectedOrderId}  />
           )}
         </DialogContent>
         <DialogActions>

@@ -1,18 +1,13 @@
 import React, { useContext } from 'react';
-
-interface OrderDetailsProps {
-  orderId: number;
- 
-}
-
 import { DataContext } from '@/contexts/post';
 
-const OrderDetails: React.FC<OrderDetailsProps> = ({ orderId }) => {
-  const {  order } = useContext(DataContext);
-  
+const OrderDetails = ({ orderId }) => {
+  const { order } = useContext(DataContext);
+
   // Filter the orders based on the passed orderId
   const filteredOrder = order?.filter((item) => item.id === orderId);
-  const formatDate = (dateString: string) => {
+  
+  const formatDate = (dateString) => {
     const date = new Date(dateString);
     const formattedDate = date.toLocaleDateString('en-CA'); // Format as YYYY-MM-DD
     const formattedTime = date.toLocaleTimeString('en-GB', {
@@ -21,6 +16,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ orderId }) => {
     }); // Format as HH:mm
     return `${formattedDate} ${formattedTime}`;
   };
+
   return (
     <div>
       <h2>Order Details</h2>
@@ -34,12 +30,12 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ orderId }) => {
             <p><strong>Order Created At:</strong> {formatDate(item.createdAt)}</p>
             <p><strong>Order Updated At:</strong> {formatDate(item.updatedAt)}</p>
             {item.post && (
-  <>
-    {item.post.title && <p><strong>Post Title:</strong> {item.post.title}</p>}
-    {item.post.status && <p><strong>Post Status:</strong> {item.post.status}</p>}
-    {item.post.adress && <p><strong>Post Address:</strong> {item.post.adress}</p>}
-  </>
-)}
+              <>
+                {item.post.title && <p><strong>Post Title:</strong> {item.post.title}</p>}
+                {item.post.status && <p><strong>Post Status:</strong> {item.post.status}</p>}
+                {item.post.address && <p><strong>Post Address:</strong> {item.post.address}</p>}
+              </>
+            )}
             {/* Add more details as needed */}
           </div>
         ))

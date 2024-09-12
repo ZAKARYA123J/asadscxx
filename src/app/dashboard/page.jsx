@@ -8,15 +8,7 @@ import { TotalCustomers } from '@/components/dashboard/overview/total-customers'
 import { TotalProfit } from '@/components/dashboard/overview/total-profit';
 import { InfoModal } from '../infomodel';
 
-interface CardComponentProps {
-  title: string;
-  content: React.ReactNode;
-  children: React.ReactNode;
-  onCardClick: (title: string, content: React.ReactNode) => void;
-}
-
-
-const CardComponent: React.FC<CardComponentProps> = ({ title, content, children, onCardClick }) => {
+const CardComponent = ({ title, content, children, onCardClick }) => {
   return (
     <Grid lg={3} sm={6} xs={12} onClick={() => onCardClick(title, content)} sx={{ cursor: 'pointer' }}>
       {children}
@@ -24,12 +16,12 @@ const CardComponent: React.FC<CardComponentProps> = ({ title, content, children,
   );
 };
 
-export default function Page(): React.JSX.Element {
+export default function Page() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
-  const [modalContent, setModalContent] = useState<React.ReactNode>(null);
+  const [modalContent, setModalContent] = useState(null);
 
-  const handleCardClick = (title: string, content: React.ReactNode) => {
+  const handleCardClick = (title, content) => {
     setModalTitle(title);
     setModalContent(content);
     setIsModalOpen(true);

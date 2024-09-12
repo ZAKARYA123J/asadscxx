@@ -6,23 +6,13 @@ import { DataContext } from '@/contexts/post';
 import { CompaniesFilters } from '@/components/dashboard/integrations/integrations-filters';
 import AddOrderDialog from '../OrderDialog';
 
-interface Order {
-  id: number;
-  fullName: string;
-  dateDebut: string;
-  dateFine: string;
-  price: string;
-  CIN: string;
-  postId: string;
-}
-
-export default function Page(): React.ReactElement {
+export default function Page() {
   const { createOrder, updateOrder } = useContext(DataContext);
 
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const handleOpenDialog = (order: Order | null) => {
+  const handleOpenDialog = (order) => {
     setSelectedOrder(order);
     setIsDialogOpen(true);
   };
@@ -31,7 +21,7 @@ export default function Page(): React.ReactElement {
     setIsDialogOpen(false);
   };
 
-  const handleSaveOrder = async (updatedOrder: Order) => {
+  const handleSaveOrder = async (updatedOrder) => {
     if (selectedOrder) {
       // Update existing order
       await updateOrder(selectedOrder.id, updatedOrder);

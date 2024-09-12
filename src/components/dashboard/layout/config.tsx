@@ -20,7 +20,7 @@ const Navigation: React.FC = () => {
       <ul>
         {navItems.map(({ key, title, href, icon }) => (
           <li key={key}>
-            <Link href={href}>
+            <Link href={href as string}> {/* Type assertion here */}
               <a>
                 <i className={`icon-${icon}`} /> {title}
               </a>

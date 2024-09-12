@@ -1,25 +1,18 @@
-import React, { useState, useEffect, ChangeEvent, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Select, MenuItem, InputLabel, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button } from '@mui/material';
 import { DataContext } from '@/contexts/post';
 
-interface AddOrderDialogProps {
-  open: boolean;
-  onClose: () => void;
-  selectedPostId?: string; // Optional prop to accept postId from another component
-  category:string
-}
-
-const AddOrderDialog: React.FC<AddOrderDialogProps> = ({ open, onClose, selectedPostId,category }) => {
+const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
   const [newCustomer, setNewCustomer] = useState({
     fullName: '',
     dateDebut: '',
     dateFine: '',
     price: '',
     CIN: '',
-    postId: selectedPostId || '' // Initialize with selectedPostId if provided
+    postId: selectedPostId || ''
   });
   const { data } = useContext(DataContext);
-// console.log(category)
+
   useEffect(() => {
     if (selectedPostId) {
       setNewCustomer(prevState => ({
@@ -29,21 +22,20 @@ const AddOrderDialog: React.FC<AddOrderDialogProps> = ({ open, onClose, selected
     }
   }, [selectedPostId]);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event) => {
     setNewCustomer({
       ...newCustomer,
       [event.target.name]: event.target.value,
     });
   };
 
-  const handlePostChange = (event: ChangeEvent<{ value: unknown }>) => {
-    setNewCustomer({ ...newCustomer, postId: event.target.value as string });
+  const handlePostChange = (event) => {
+    setNewCustomer({ ...newCustomer, postId: event.target.value });
   };
 
   const handleSave = async () => {
     try {
       const response = await fetch('http://localhost:3001/api/DateReserve', {
-       
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -63,7 +55,6 @@ const AddOrderDialog: React.FC<AddOrderDialogProps> = ({ open, onClose, selected
     }
   };
 
-  // Filter data to show only the selected post if selectedPostId exists
   const filteredData = selectedPostId
     ? data.filter(item => item.id === selectedPostId)
     : data.filter(item => item.status !== 'unavailable' && item.status !== 'taken');
@@ -82,34 +73,32 @@ const AddOrderDialog: React.FC<AddOrderDialogProps> = ({ open, onClose, selected
           value={newCustomer.fullName}
           onChange={handleChange}
         />
-          {category == "Location" && (
-            <>
+        {category === "Location" && (
+          <>
             <TextField
-            margin="dense"
-            label="dateDebut"
-            name="dateDebut"
-            type="date"
-            fullWidth
-            variant="outlined"
-            value={newCustomer.dateDebut}
-            onChange={handleChange}
-            InputLabelProps={{ shrink: true }}
-          />
-        
-          <TextField
-            margin="dense"
-            label="dateFine"
-            name="dateFine"
-            type="date"
-            fullWidth
-            variant="outlined"
-            value={newCustomer.dateFine}
-            onChange={handleChange}
-            InputLabelProps={{ shrink: true }}
-          />
+              margin="dense"
+              label="Date Debut"
+              name="dateDebut"
+              type="date"
+              fullWidth
+              variant="outlined"
+              value={newCustomer.dateDebut}
+              onChange={handleChange}
+              InputLabelProps={{ shrink: true }}
+            />
+            <TextField
+              margin="dense"
+              label="Date Fine"
+              name="dateFine"
+              type="date"
+              fullWidth
+              variant="outlined"
+              value={newCustomer.dateFine}
+              onChange={handleChange}
+              InputLabelProps={{ shrink: true }}
+            />
           </>
-          )}
-        
+        )}
         <TextField
           margin="dense"
           label="CIN"
@@ -121,15 +110,15 @@ const AddOrderDialog: React.FC<AddOrderDialogProps> = ({ open, onClose, selected
         />
         <TextField
           margin="dense"
-          label="price"
+          label="Price"
           name="price"
-          type='number'
+          type="number"
           fullWidth
           variant="outlined"
           value={newCustomer.price}
           onChange={handleChange}
         />
-        <InputLabel style={{ marginLeft: '10px' }}>Select available Post</InputLabel>
+        <InputLabel style={{ marginLeft: '10px' }}>Select Available Post</InputLabel>
         <Select
           fullWidth
           variant="outlined"

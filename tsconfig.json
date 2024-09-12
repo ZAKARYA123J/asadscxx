@@ -21,6 +21,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/dashboard/updateor/[id]/page.jsx", "src/app/dashboard/show/Updatedetail.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/dashboard/updateor/[id]/page.jsx", "src/app/dashboard/show/Updatedetail.tsx", "src/app/dashboard/OrderDialog.jsx", "src/components/dashboard/overview/latest-orders.jsx", "src/app/dashboard/orders/page.jsx", "src/app/dashboard/page.jsx", "src/components/core/theme-provider/emotion-cache.jsx", "src/components/dashboard/integrations/OrderDetails.jsx"],
   "exclude": ["node_modules"]
 }

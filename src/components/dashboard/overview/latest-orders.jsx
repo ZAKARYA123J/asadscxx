@@ -6,7 +6,6 @@ import CardActions from '@mui/material/CardActions';
 import CardHeader from '@mui/material/CardHeader';
 import Chip from '@mui/material/Chip';
 import Divider from '@mui/material/Divider';
-import type { SxProps } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -17,27 +16,7 @@ import { useContext } from 'react';
 import { DataContext } from '@/contexts/post'; // Make sure this is the correct path to your DataContext
 import Link from 'next/link';
 
-
-const statusMap = {
-  // pending: { label: 'Pending', color: 'warning' },
-  // delivered: { label: 'Delivered', color: 'success' },
-  // refunded: { label: 'Refunded', color: 'error' },
-} as const;
-
-export interface Order {
-  id: string;
-  customer: { name: string };
-  amount: number;
-  status: 'pending' | 'delivered' | 'refunded';
-  createdAt: Date;
-}
-
-export interface LatestOrdersProps {
-  orders?: Order[];
-  sx?: SxProps;
-}
-
-export function LatestOrders({ sx }: LatestOrdersProps): React.JSX.Element {
+export function LatestOrders({ sx }) {
   const { order, loading, error } = useContext(DataContext); // Accessing order, loading, and error from context
 
   if (loading) {
@@ -67,30 +46,23 @@ export function LatestOrders({ sx }: LatestOrdersProps): React.JSX.Element {
             </TableRow>
           </TableHead>
           <TableBody>
-            {order.map((order: Order) => { // Assuming `order` is an array of Order objects
-              const { label, color } = statusMap[order.status] ?? { label: 'Unknown', color: 'default' };
-
+            {order.map((order) => { // Assuming `order` is an array of Order objects
               return (
                 <TableRow hover key={order.id}>
                   <TableCell>ORD-{order.id}</TableCell>
-                  <TableCell>{order.fullName}</TableCell>
-                  <TableCell>{order.createdAt}</TableCell>
+                  {/* <TableCell>{order.customer.name}</TableCell> */}
+                  <TableCell>{order.createdAt.toString()}</TableCell>
                   <TableCell>
-  {order.post && (
-    <>
-      {order.post.typeId === 1 ? (
-        <Chip label="Vente" color="primary" />
-      ) : order.post.typeId === 2 ? (
-        <Chip label="Location" color="secondary" />
-      ) : (
-        <Chip label="Unknown" color="default" />
-      )}
-    </>
-  )}
-</TableCell>
-
-
-
+                    {order.status === 'pending' && (
+                      <Chip label="Pending" color="warning" />
+                    )}
+                    {order.status === 'delivered' && (
+                      <Chip label="Delivered" color="success" />
+                    )}
+                    {order.status === 'refunded' && (
+                      <Chip label="Refunded" color="error" />
+                    )}
+                  </TableCell>
                 </TableRow>
               );
             })}
@@ -99,15 +71,15 @@ export function LatestOrders({ sx }: LatestOrdersProps): React.JSX.Element {
       </Box>
       <Divider />
       <CardActions sx={{ justifyContent: 'flex-end' }}>
-<Link href={"/dashboard/orders"}>
-        <Button
-          color="inherit"
-          endIcon={<ArrowRightIcon fontSize="var(--icon-fontSize-md)" />}
-          size="small"
-          variant="text"
-        >
-          View all
-        </Button>
+        <Link href="/dashboard/orders">
+          <Button
+            color="inherit"
+            endIcon={<ArrowRightIcon fontSize="var(--icon-fontSize-md)" />}
+            size="small"
+            variant="text"
+          >
+            View all
+          </Button>
         </Link>
       </CardActions>
     </Card>
