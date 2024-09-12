@@ -30,7 +30,7 @@ export function LatestOrders({ sx }) {
   if (!order || order.length === 0) {
     return <p>No orders available.</p>; // Display a message if no orders are found
   }
-
+console.log("ewewdss")
   return (
     <Card sx={sx}>
       <CardHeader title="Latest orders" />
