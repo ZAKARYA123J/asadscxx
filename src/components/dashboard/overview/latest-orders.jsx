@@ -51,18 +51,23 @@ export function LatestOrders({ sx }) {
                 <TableRow hover key={order.id}>
                   <TableCell>ORD-{order.id}</TableCell>
                   <TableCell>{order.fullName}</TableCell>
-                  <TableCell>{order.createdAt.toString()}</TableCell>
+                  <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
+
                   <TableCell>
-                    {order.status === 'pending' && (
-                      <Chip label="Pending" color="warning" />
-                    )}
-                    {order.status === 'delivered' && (
-                      <Chip label="Delivered" color="success" />
-                    )}
-                    {order.status === 'refunded' && (
-                      <Chip label="Refunded" color="error" />
-                    )}
-                  </TableCell>
+  {order.post ? ( // Use optional chaining here
+    order.post.categoryId === 1 && (
+      <Chip label="Vente" color="warning" />
+    )
+  ) : (
+    // Handle the case where order.post is undefined or null
+    <span>Post information unavailable</span>
+  )}
+  {order.post ? (
+    order.post.categoryId === 2 && (
+      <Chip label="Location" color="success" />
+    )
+  ) : null}
+</TableCell>
                 </TableRow>
               );
             })}

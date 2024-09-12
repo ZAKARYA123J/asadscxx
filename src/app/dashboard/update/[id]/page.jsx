@@ -281,7 +281,7 @@ const [imageCount, setImageCount] = useState(0);
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
-          Create Post
+          Update Post
         </Button>
       </Box>
     </Container>
