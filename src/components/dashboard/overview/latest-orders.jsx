@@ -50,7 +50,7 @@ export function LatestOrders({ sx }) {
               return (
                 <TableRow hover key={order.id}>
                   <TableCell>ORD-{order.id}</TableCell>
-                  {/* <TableCell>{order.customer.name}</TableCell> */}
+                  <TableCell>{order.fullName}</TableCell>
                   <TableCell>{order.createdAt.toString()}</TableCell>
                   <TableCell>
                     {order.status === 'pending' && (
