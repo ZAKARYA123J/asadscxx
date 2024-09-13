@@ -2,7 +2,7 @@
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 import { TextField, Button, Container, Grid, Typography } from '@mui/material'
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
 import { Alert, AlertTitle } from '@mui/material'; 
 
 export default function MyComponent() {
@@ -15,7 +15,7 @@ export default function MyComponent() {
     price: '',
     CIN: ''
   });
-  const router = useRouter();
+ 
 
   const handleChange = (e) => {
     const { name, value } = e.target;

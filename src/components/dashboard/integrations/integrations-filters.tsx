@@ -24,7 +24,14 @@ export function CompaniesFilters(): React.JSX.Element {
     // You can refresh the orders list after a delete
     console.log('Order deleted, refresh list if necessary');
   };
-
+  interface Order {
+    id: number;
+    fullName: string;
+    dateDebut: string;
+    dateFine: string;
+    CIN: string;
+    price: number;
+  }
   const filteredOrders = order.filter((order: Order) =>
     order.id.toString().includes(searchQuery) || 
     order.CIN.toLowerCase().includes(searchQuery.toLowerCase())
