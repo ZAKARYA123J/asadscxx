@@ -1,14 +1,14 @@
 "use client";
-import React, { useState } from 'react';
+import React from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
 import { Budget } from '@/components/dashboard/overview/budget';
 import { LatestOrders } from '@/components/dashboard/overview/latest-orders';
 import { TasksProgress } from '@/components/dashboard/overview/tasks-progress';
 import { TotalCustomers } from '@/components/dashboard/overview/total-customers';
 import { TotalProfit } from '@/components/dashboard/overview/total-profit';
-import { InfoModal } from '../infomodel';
 
-const CardComponent = ({ title, content, children, onCardClick }) => {
+
+const CardComponent = ({  children }) => {
   return (
     <Grid lg={3} sm={6} xs={12} >
       {children}

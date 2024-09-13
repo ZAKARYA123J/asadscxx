@@ -9,7 +9,7 @@ import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogContentText
 import { List as ListIcon } from '@phosphor-icons/react/dist/ssr/List';
 import Cookies from 'js-cookie'; // Import js-cookie for handling cookies
 import { MobileNav } from './mobile-nav';
-
+import { IoLogOutOutline } from "react-icons/io5";
 export function MainNav(): React.JSX.Element {
   const [openNav, setOpenNav] = React.useState<boolean>(false);
   const router = useRouter(); // Use Next.js router for page navigation
@@ -68,7 +68,7 @@ export function MainNav(): React.JSX.Element {
           <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
             <Avatar sx={{ cursor: 'pointer' }} />
             <Button variant="contained" color="primary" onClick={handleOpenLogoutModal}>
-              Logout
+              <IoLogOutOutline fontSize={25}/>
             </Button>
           </Stack>
         </Stack>

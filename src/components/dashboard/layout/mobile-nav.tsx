@@ -8,7 +8,6 @@ import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { Logo } from '@/components/core/logo';
 
 import type { NavItemConfig } from '@/types/nav';
 import { paths } from '@/paths';
