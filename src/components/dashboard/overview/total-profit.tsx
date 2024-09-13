@@ -18,9 +18,6 @@ export function TotalProfit({  sx }: TotalProfitProps): React.JSX.Element {
       <CardContent>
         <Stack direction="row" sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }} spacing={3}>
           <Stack spacing={1}>
-            <Typography color="text.secondary" variant="overline">
-            Rented posts
-            </Typography>
             <Typography variant="h4">Rented</Typography>
           </Stack>
           {/* <Avatar sx={{ backgroundColor: 'var(--mui-palette-primary-main)', height: '54px', width: '54px' }}>

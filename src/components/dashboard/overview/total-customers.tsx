@@ -5,7 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
 import type { SxProps } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-
+import { DataContext } from '@/contexts/post';
 
 export interface TotalCustomersProps {
   diff?: number;
@@ -15,7 +15,7 @@ export interface TotalCustomersProps {
 }
 
 export function TotalCustomers({   sx }: TotalCustomersProps): React.JSX.Element {
-
+const {order}=React.useContext(DataContext)
 
   return (
     <Card sx={sx}>
@@ -23,10 +23,8 @@ export function TotalCustomers({   sx }: TotalCustomersProps): React.JSX.Element
         <Stack spacing={2}>
           <Stack direction="row" sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }} spacing={3}>
             <Stack spacing={1}>
-              <Typography color="text.secondary" variant="overline">
-                sold posts
-              </Typography>
               <Typography variant="h4">Sold</Typography>
+              <Typography variant="h6">{order?.length || 0} Ordre</Typography>
             </Stack>
             {/* <Avatar sx={{ backgroundColor: 'var(--mui-palette-success-main)', height: '56px', width: '56px' }}>
               <UsersIcon fontSize="var(--icon-fontSize-lg)" />

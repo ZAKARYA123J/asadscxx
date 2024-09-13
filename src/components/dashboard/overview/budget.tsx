@@ -5,7 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
 import type { SxProps } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-
+import { DataContext } from '@/contexts/post';
 
 export interface BudgetProps {
 
@@ -15,7 +15,7 @@ export interface BudgetProps {
 }
 
 export function Budget({   sx,  }: BudgetProps): React.JSX.Element {
-
+const {data}=React.useContext(DataContext)
 
   return (
     <Card sx={sx}>
@@ -23,10 +23,8 @@ export function Budget({   sx,  }: BudgetProps): React.JSX.Element {
         <Stack spacing={3}>
           <Stack direction="row" sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }} spacing={3}>
             <Stack spacing={1}>
-              <Typography color="text.secondary" variant="overline">
-              Total posts
-              </Typography>
               <Typography variant="h4">Total</Typography>
+              <Typography variant="h6">{data?.length || 0} Posts</Typography>
             </Stack>
             {/* <Avatar sx={{ backgroundColor: 'var(--mui-palette-primary-main)', height: '56px', width: '56px' }}>
               <CurrencyDollarIcon fontSize="var(--icon-fontSize-lg)" />

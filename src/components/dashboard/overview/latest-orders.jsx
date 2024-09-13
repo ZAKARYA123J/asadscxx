@@ -50,7 +50,7 @@ console.log("ewewdss")
             </TableRow>
           </TableHead>
           <TableBody>
-            {order.slice(0,10).map((order) => { // Assuming `order` is an array of Order objects
+            {order.slice(0,5).map((order) => { // Assuming `order` is an array of Order objects
               return (
                 <TableRow hover key={order.id}>
                   <TableCell>ORD-{order.id}</TableCell>

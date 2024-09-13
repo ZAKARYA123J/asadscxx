@@ -58,6 +58,7 @@ const DataTable = () => {
   };
 
   const handleDelete = async () => {
+      
     setFilteredData((prevData) => prevData.filter(item => item.id !== selectedId));
     handleClose(); // Close the dialog after deletion
   };
@@ -139,8 +140,8 @@ const DataTable = () => {
               <TableCell>City</TableCell>
               <TableCell>Category</TableCell>
               <TableCell>Status</TableCell>
-              <TableCell>Orders</TableCell>
-              <TableCell></TableCell>
+              
+              <TableCell align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -154,31 +155,35 @@ const DataTable = () => {
                   <TableCell>{row.category?.name || 'N/A'}</TableCell>
                   <TableCell>{getStatusIcon(row.status)}</TableCell>
                   <TableCell>
-                    {row.status === "taken" ? (
-                      row.DateReserve ? (
-                        <span style={{ color: 'black' }}>Ordered</span>
-                      ) : (
-                        <span style={{ color: 'red' }}>Has been taken</span>
-                      )
-                    ) : (
-                      <IconButton onClick={() => handleAddOrder(row.id, row.category?.name)}>
-                      <MdAddCard fontSize={25} style={{ color: "#1e90ff" }} />
-                    </IconButton>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <IconButton onClick={() => handleDetail(row.id, row.Detail)}>
-                        <InfoIcon />
-                      </IconButton>
-                      <IconButton onClick={() => handleUpdate(row.id)} color="primary">
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton onClick={() => handleClickOpen(row.id)} style={{ color: 'red' }}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </div>
-                  </TableCell>
+  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+    {row.status === "taken" ? (
+      row.DateReserve ? (
+        <span style={{ color: 'black' }}>Ordered</span>
+      ) : (
+        <span style={{ color: 'red' }}>Taken</span>
+      )
+    ) : (
+      <IconButton onClick={() => handleAddOrder(row.id, row.category?.name)}>
+        <MdAddCard fontSize={25} style={{ color: "#1e90ff" }} />
+      </IconButton>
+    )}
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <IconButton onClick={() => handleDetail(row.id, row.Detail)}>
+        <InfoIcon />
+      </IconButton>
+      <IconButton onClick={() => handleUpdate(row.id)} color="primary">
+        <EditIcon />
+      </IconButton>
+      <IconButton onClick={() => handleClickOpen(row.id)} style={{ color: 'red' }}>
+        <DeleteIcon />
+      </IconButton>
+    </div>
+  </div>
+</TableCell>
+
+                  {/* <TableCell>
+                   
+                  </TableCell> */}
                 </TableRow>
               ))
             ) : (
