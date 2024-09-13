@@ -15,7 +15,7 @@ import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/Arr
 import { useContext } from 'react';
 import { DataContext } from '@/contexts/post'; // Make sure this is the correct path to your DataContext
 import Link from 'next/link';
-
+import { OrderActions } from '@/components/OrderActions';
 export function LatestOrders({ sx }) {
   const { order, loading, error } = useContext(DataContext); // Accessing order, loading, and error from context
 
@@ -29,8 +29,10 @@ export function LatestOrders({ sx }) {
 
   if (!order || order.length === 0) {
     return <p>No orders available.</p>; // Display a message if no orders are found
-  }
-  console.log("dsdsds")
+  }  const handleDeleteSuccess = () => {
+    // You can refresh the orders list after a delete
+    console.log('Order deleted, refresh list if necessary');
+  };
 console.log("ewewdss")
   return (
     <Card sx={sx}>
@@ -44,10 +46,11 @@ console.log("ewewdss")
               <TableCell>Customer</TableCell>
               <TableCell sortDirection="desc">Date</TableCell>
               <TableCell>Status</TableCell>
+              <TableCell align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {order.map((order) => { // Assuming `order` is an array of Order objects
+            {order.slice(0,10).map((order) => { // Assuming `order` is an array of Order objects
               return (
                 <TableRow hover key={order.id}>
                   <TableCell>ORD-{order.id}</TableCell>
@@ -69,6 +72,9 @@ console.log("ewewdss")
     )
   ) : null}
 </TableCell>
+<TableCell align="right">
+                    <OrderActions orderId={order.id} onDeleteSuccess={handleDeleteSuccess} />
+                  </TableCell>
                 </TableRow>
               );
             })}
