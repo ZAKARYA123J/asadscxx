@@ -17,7 +17,7 @@ import { DataContext } from '@/contexts/post';
 import { useRouter } from 'next/navigation';
 import { MdAddCard } from "react-icons/md";
 import AddOrderDialog from '../OrderDialog';
-
+import { FcSearch } from "react-icons/fc";
 const DataTable = () => {
   const { data, loading, error } = useContext(DataContext);
   const router = useRouter();
@@ -29,6 +29,13 @@ const DataTable = () => {
   const [searchTerm, setSearchTerm] = useState(''); // Search input state
   const [filteredData, setFilteredData] = useState([]); // State for search results
   const [selectedPostCategory, setSelectedPostCategory] = useState("");
+  const [selectedCity, setSelectedCity] = useState('');
+const [selectedCategory, setSelectedCategory] = useState('');
+const [selectedStatus, setSelectedStatus] = useState('');
+const uniqueCities = [...new Set(data.map(item => item.ville))];
+const uniqueCategories = [...new Set(data.map(item => item.category?.name))];
+const uniqueStatuses = ['available', 'unavailable', 'taken']; // Predefined statuses
+
   useEffect(() => {
     setMounted(true);
     setFilteredData(data); // Initialize filtered data with the original data
@@ -47,15 +54,24 @@ const DataTable = () => {
   };
 
   const handleSearch = () => {
-    const searchData = data.filter((item) =>
-      item.id.toString().includes(searchTerm) ||  // Search by ID
-      item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.adress.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.ville.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.category?.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredData(searchData); // Update the filtered data based on the search term
+    const searchData = data.filter((item) => {
+      const matchesSearchTerm = 
+        item.id.toString().includes(searchTerm) ||
+        item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.adress.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.ville.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.category?.name.toLowerCase().includes(searchTerm.toLowerCase());
+  
+      const matchesCity = selectedCity === '' || item.ville === selectedCity;
+      const matchesCategory = selectedCategory === '' || item.category?.name === selectedCategory;
+      const matchesStatus = selectedStatus === '' || item.status === selectedStatus;
+  
+      return matchesSearchTerm && matchesCity && matchesCategory && matchesStatus;
+    });
+  
+    setFilteredData(searchData);
   };
+  
 
   const handleDelete = async () => {
       
@@ -114,21 +130,77 @@ const DataTable = () => {
 
   return (
     <>
-      <div style={{ textAlign: 'right', marginBottom: "10px" }}>
+      <div style={{ textAlign: 'right'}}>
         <Link href="/dashboard/insert" passHref>
           <Button variant="contained">Add <FaPlus style={{ marginLeft: "2px" }} /></Button>
         </Link>
       </div>
-      <div style={{ textAlign: 'left', marginBottom: "10px" }}>
-        <TextField 
-          label="Search" 
-          variant="outlined" 
-          value={searchTerm} 
-          onChange={(e) => setSearchTerm(e.target.value)} 
-          fullWidth
-        />
-        <Button variant="contained" onClick={handleSearch} style={{ marginTop: "10px" }}>Search</Button>
-      </div>
+      <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+  {/* <TextField 
+    label="Search" 
+    variant="outlined" 
+    value={searchTerm} 
+    onChange={(e) => setSearchTerm(e.target.value)} 
+    fullWidth
+  /> */}
+
+  <TextField
+    select
+ 
+    value={selectedCity}
+    onChange={(e) => setSelectedCity(e.target.value)}
+    SelectProps={{ native: true }}
+    variant="outlined"
+    fullWidth
+  >
+    <option value="">All Cities</option>
+    {uniqueCities.map(city => (
+      <option key={city} value={city}>
+        {city}
+      </option>
+    ))}
+  </TextField>
+
+  <TextField
+    select
+  
+    value={selectedCategory}
+    onChange={(e) => setSelectedCategory(e.target.value)}
+    SelectProps={{ native: true }}
+    variant="outlined"
+    fullWidth
+  >
+    <option value="">All Categories</option>
+    {uniqueCategories.map(category => (
+      <option key={category} value={category}>
+        {category}
+      </option>
+    ))}
+  </TextField>
+
+  <TextField
+    select
+  
+    value={selectedStatus}
+    onChange={(e) => setSelectedStatus(e.target.value)}
+    SelectProps={{ native: true }}
+    variant="outlined"
+    fullWidth
+  >
+    <option value="">All Statuses</option>
+    {uniqueStatuses.map(status => (
+      <option key={status} value={status}>
+        {status}
+      </option>
+    ))}
+  </TextField>
+  <Button  onClick={handleSearch} style={{ marginTop: '10px' }}>
+    <FcSearch fontSize={30}/>
+  </Button>
+  
+</div>
+
+
     
       <TableContainer component={Paper}>
         <Table>
