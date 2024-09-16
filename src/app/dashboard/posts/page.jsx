@@ -20,114 +20,134 @@ import AddOrderDialog from '../OrderDialog';
 import { FcSearch } from "react-icons/fc";
 const DataTable = () => {
   const { data, loading, error } = useContext(DataContext);
-  const router = useRouter();
-  const [mounted, setMounted] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [selectedId, setSelectedId] = useState(null);
-  const [dialogOpen, setDialogOpen] = useState(false); // State for AddOrderDialog
-  const [selectedPostId, setSelectedPostId] = useState(""); // State for selected postId
-  const [searchTerm, setSearchTerm] = useState(''); // Search input state
-  const [filteredData, setFilteredData] = useState([]); // State for search results
-  const [selectedPostCategory, setSelectedPostCategory] = useState("");
-  const [selectedCity, setSelectedCity] = useState('');
-const [selectedCategory, setSelectedCategory] = useState('');
-const [selectedStatus, setSelectedStatus] = useState('');
-const uniqueCities = [...new Set(data.map(item => item.ville))];
-const uniqueCategories = [...new Set(data.map(item => item.category?.name))];
-const uniqueStatuses = ['available', 'unavailable', 'taken']; // Predefined statuses
+    const router = useRouter();
+    const [mounted, setMounted] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [selectedId, setSelectedId] = useState(null);
+    const [dialogOpen, setDialogOpen] = useState(false); // State for AddOrderDialog
+    const [selectedPostId, setSelectedPostId] = useState(""); // State for selected postId
+    const [searchTerm, setSearchTerm] = useState(''); // Search input state
+    const [filteredData, setFilteredData] = useState([]); // State for search results
+    const [selectedPostCategory, setSelectedPostCategory] = useState("");
+    const [selectedCity, setSelectedCity] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [selectedStatus, setSelectedStatus] = useState('');
+    const uniqueCities = [...new Set(data.map(item => item.ville))];
+    const uniqueCategories = [...new Set(data.map(item => item.category?.name))];
+    const uniqueStatuses = ['available', 'unavailable', 'taken']; // Predefined statuses
 
-  useEffect(() => {
-    setMounted(true);
-    setFilteredData(data); // Initialize filtered data with the original data
-  }, [data]);
+    useEffect(() => {
+        setMounted(true);
+        setFilteredData(data); // Initialize filtered data with the original data
+    }, [data]);
 
-  if (!mounted) return null;
+    if (!mounted) return null;
 
-  const handleClickOpen = (id) => {
-    setSelectedId(id);
-    setOpen(true);
-  };
+    const handleClickOpen = (id) => {
+      setSelectedId(id);  // Set the ID of the post you want to delete
+      setOpen(true);     // Open the confirmation dialog
+    };
+    
+    const handleClose = () => {
+        setOpen(false);
+        setSelectedId(null);
+    };
 
-  const handleClose = () => {
-    setOpen(false);
-    setSelectedId(null);
-  };
+    const handleSearch = () => {
+        const searchData = data.filter((item) => {
+            const matchesSearchTerm =
+                item.id.toString().includes(searchTerm) ||
+                item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.adress.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.ville.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.category?.name.toLowerCase().includes(searchTerm.toLowerCase());
 
-  const handleSearch = () => {
-    const searchData = data.filter((item) => {
-      const matchesSearchTerm = 
-        item.id.toString().includes(searchTerm) ||
-        item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.adress.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.ville.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.category?.name.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesCity = selectedCity === '' || item.ville === selectedCity;
+            const matchesCategory = selectedCategory === '' || item.category?.name === selectedCategory;
+            const matchesStatus = selectedStatus === '' || item.status === selectedStatus;
+
+            return matchesSearchTerm && matchesCity && matchesCategory && matchesStatus;
+        });
+
+        setFilteredData(searchData);
+    };
+
+    const handleDelete = async (id) => {
+      try {
+          const response = await fetch(`https://immoceanrepo.vercel.app/api/posts/${id}`, { // Replace with your actual API endpoint
+              method: 'DELETE',
+              headers: {
+                  'Content-Type': 'application/json', // Might be required depending on your API
+              },
+          });
   
-      const matchesCity = selectedCity === '' || item.ville === selectedCity;
-      const matchesCategory = selectedCategory === '' || item.category?.name === selectedCategory;
-      const matchesStatus = selectedStatus === '' || item.status === selectedStatus;
-  
-      return matchesSearchTerm && matchesCity && matchesCategory && matchesStatus;
-    });
-  
-    setFilteredData(searchData);
+          if (response.ok) {
+              // Handle successful deletion on the client-side
+              setFilteredData(filteredData.filter(post => post.id !== id)); // Remove the deleted post from the filtered data
+              setOpen(false); // Close the confirmation dialog
+              alert('Post deleted successfully!'); // Show a success message
+             
+          } else {
+              console.error('Error deleting post:', await response.text()); // Handle errors appropriately
+              alert('Error deleting post. Please try again later.');
+          }
+      } catch (error) {
+          console.error('Error deleting post:', error); // Handle errors
+          alert('Error deleting post. Please try again later.');
+      } finally {
+          setOpen(false); // Close the dialog regardless of success or failure
+      }
   };
   
 
-  const handleDelete = async () => {
-      
-    setFilteredData((prevData) => prevData.filter(item => item.id !== selectedId));
-    handleClose(); // Close the dialog after deletion
-  };
+    const handleUpdate = (id) => {
+        router.push(`/dashboard/update/${id}`);
+    };
 
-  const handleUpdate = (id) => {
-    router.push(`/dashboard/update/${id}`);
-  };
+    const handleDetail = (id, Detail) => {
+        if (Detail) {
+            router.push(`/dashboard/show/${id}`);
+        } else {
+            router.push(`/dashboard/detail/${id}`);
+        }
+    };
 
-  const handleDetail = (id, Detail) => {
-    if (Detail) {
-      router.push(`/dashboard/show/${id}`);
-    } else {
-      router.push(`/dashboard/detail/${id}`);
-    }
-  };
+    const handleAddOrder = (postId, category) => {
+        setSelectedPostId(postId);
+        setDialogOpen(true);
+        setSelectedPostCategory(category);
+    };
 
-  const handleAddOrder = (postId,category) => {
-    setSelectedPostId(postId);
-    setDialogOpen(true);
-    setSelectedPostCategory(category);
-  };
+    const getStatusIcon = (status) => {
+        switch (status) {
+            case 'available':
+                return (
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <CheckCircleIcon style={{ color: 'green', marginRight: '5px' }} />
+                        <span>Available</span>
+                    </div>
+                );
+            case 'unavailable':
+                return (
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <HourglassEmptyIcon style={{ color: 'orange', marginRight: '5px' }} />
+                        <span>Unavailable</span>
+                    </div>
+                );
+            case 'taken':
+                return (
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <CancelIcon style={{ color: 'red', marginRight: '5px' }} />
+                        <span>Taken</span>
+                    </div>
+                );
+            default:
+                return null;
+        }
+    };
 
-  const getStatusIcon = (status) => {
-    switch (status) {
-      case 'available':
-        return (
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <CheckCircleIcon style={{ color: 'green', marginRight: '5px' }} />
-            <span>Available</span>
-          </div>
-        );
-      case 'unavailable':
-        return (
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <HourglassEmptyIcon style={{ color: 'orange', marginRight: '5px' }} />
-            <span>Unavailable</span>
-          </div>
-        );
-      case 'taken':
-        return (
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <CancelIcon style={{ color: 'red', marginRight: '5px' }} />
-            <span>Taken</span>
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
-
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>{error}</div>;
   return (
     <>
       <div style={{ textAlign: 'right'}}>
@@ -228,7 +248,7 @@ const uniqueStatuses = ['available', 'unavailable', 'taken']; // Predefined stat
                   <TableCell>{getStatusIcon(row.status)}</TableCell>
                   <TableCell>
   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-    {row.status === "taken" ? (
+    {row.status === "taken" || row.status === "unavailable" ? (
       row.DateReserve ? (
         <span style={{ color: 'black' }}>Ordered</span>
       ) : (
@@ -240,15 +260,21 @@ const uniqueStatuses = ['available', 'unavailable', 'taken']; // Predefined stat
       </IconButton>
     )}
     <div style={{ display: 'flex', alignItems: 'center' }}>
+    
       <IconButton onClick={() => handleDetail(row.id, row.Detail)}>
         <InfoIcon />
       </IconButton>
-      <IconButton onClick={() => handleUpdate(row.id)} color="primary">
+      {row.status === "available" ? (<IconButton onClick={() => handleUpdate(row.id)} color="primary">
         <EditIcon />
-      </IconButton>
+      </IconButton>):(
+        <p>
+          
+        </p>
+      )}
+      
       <IconButton onClick={() => handleClickOpen(row.id)} style={{ color: 'red' }}>
-        <DeleteIcon />
-      </IconButton>
+                        <DeleteIcon />
+                      </IconButton>
     </div>
   </div>
 </TableCell>
@@ -280,12 +306,13 @@ const uniqueStatuses = ['available', 'unavailable', 'taken']; // Predefined stat
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleDelete} color="secondary" autoFocus>
-            Delete
-          </Button>
+        <Button onClick={handleClose} color="primary">
+  Cancel
+</Button>
+<Button onClick={() => handleDelete(selectedId)} color="secondary" autoFocus>
+  Delete
+</Button>
+
         </DialogActions>
       </Dialog>
 
