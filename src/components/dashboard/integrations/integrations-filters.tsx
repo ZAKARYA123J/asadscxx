@@ -65,7 +65,7 @@ export function CompaniesFilters(): React.JSX.Element {
                 <TableCell align="right">Customer Name</TableCell>
                 <TableCell align="right">Date Debut</TableCell>
                 <TableCell align="right">Date Fin</TableCell>
-                <TableCell align="right">CIN</TableCell>
+                {/* <TableCell align="right">CIN</TableCell> */}
                 <TableCell align="right">Price</TableCell>
                 <TableCell align="right">Actions</TableCell>
               </TableRow>
@@ -74,12 +74,12 @@ export function CompaniesFilters(): React.JSX.Element {
               {filteredOrders.map((order: Order) => (
                 <TableRow key={order.id}>
                   <TableCell component="th" scope="row">
-                    ORD-{order.id}
+                    {order.id}
                   </TableCell>
                   <TableCell align="right">{order.fullName}</TableCell>
                   <TableCell align="right">{new Date(order.dateDebut).toLocaleDateString()}</TableCell>
                   <TableCell align="right">{order.dateFine}</TableCell>
-                  <TableCell align="right">{order.CIN}</TableCell>
+                  {/* <TableCell align="right">{order.CIN}</TableCell> */}
                   <TableCell align="right">{order.price} DH</TableCell>
                   <TableCell align="right">
                     <OrderActions orderId={order.id} onDeleteSuccess={handleDeleteSuccess} />

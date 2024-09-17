@@ -13,27 +13,29 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowRight';
 import { useContext } from 'react';
-import { DataContext } from '@/contexts/post'; // Make sure this is the correct path to your DataContext
+import { DataContext } from '@/contexts/post';
 import Link from 'next/link';
 import { OrderActions } from '@/components/OrderActions';
+
 export function LatestOrders({ sx }) {
-  const { order, loading, error } = useContext(DataContext); // Accessing order, loading, and error from context
+  const { order, loading, error } = useContext(DataContext);
 
   if (loading) {
-    return <p>Loading...</p>; // Display a loading state if the data is being fetched
+    return <p>Loading...</p>;
   }
 
   if (error) {
-    return <p>Error: {error.message}</p>; // Display an error message if there is an error
+    return <p>Error: {error.message}</p>;
   }
 
   if (!order || order.length === 0) {
-    return <p>No orders available.</p>; // Display a message if no orders are found
-  }  const handleDeleteSuccess = () => {
-    // You can refresh the orders list after a delete
+    return <p>No orders available.</p>;
+  }
+
+  const handleDeleteSuccess = () => {
     console.log('Order deleted, refresh list if necessary');
   };
-console.log("ewewdss")
+
   return (
     <Card sx={sx}>
       <CardHeader title="Latest orders" />
@@ -50,43 +52,42 @@ console.log("ewewdss")
             </TableRow>
           </TableHead>
           <TableBody>
-            {order.slice(0,5).map((order) => { // Assuming `order` is an array of Order objects
-              return (
-                <TableRow hover key={order.id}>
-                  <TableCell>ORD-{order.id}</TableCell>
-                  <TableCell>{order.fullName}</TableCell>
-                  <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
-
-                  <TableCell>
-  {order.post ? ( // Use optional chaining here
-    order.post.categoryId === 1 && (
-      <Chip label="Vente" color="warning" />
-    )
-  ) : (
-    // Handle the case where order.post is undefined or null
-    <span>Post information unavailable</span>
-  )}
-  {order.post ? (
-    order.post.categoryId === 2 && (
-      <Chip label="Location" color="success" />
-    )
-  ) : null}
-</TableCell>
-<TableCell align="right">
-                    <OrderActions orderId={order.id} onDeleteSuccess={handleDeleteSuccess} />
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+            {order.slice(0, 5).map((order) => (
+              <TableRow hover key={order.id}>
+                <TableCell>ORD-{order.id}</TableCell>
+                <TableCell>{order.fullName}</TableCell>
+                <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
+                <TableCell>
+                  {order?.post ? (
+                    <>
+                      {order.post.categoryId === 1 && (
+                        <Chip label="Vente" color="warning" />
+                      )}
+                      {order.post.categoryId === 2 && (
+                        <Chip label="Location" color="success" />
+                      )}
+                    </>
+                  ) : (
+                    <span>Post information unavailable</span>
+                  )}
+                </TableCell>
+                <TableCell align="right">
+                  <OrderActions
+                    orderId={order.id}
+                    onDeleteSuccess={handleDeleteSuccess}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </Box>
       <Divider />
       <CardActions sx={{ justifyContent: 'flex-end' }}>
-        <Link href="/dashboard/orders">
+        <Link href="/dashboard/orders" passHref>
           <Button
             color="inherit"
-            endIcon={<ArrowRightIcon fontSize="var(--icon-fontSize-md)" />}
+            endIcon={<ArrowRightIcon fontSize={20} />}
             size="small"
             variant="text"
           >

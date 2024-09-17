@@ -194,8 +194,8 @@ const uniqueStatuses = ['available', 'unavailable', 'taken']; // Predefined stat
       </option>
     ))}
   </TextField>
-  <Button  onClick={handleSearch} style={{ marginTop: '10px' }}>
-    <FcSearch fontSize={30}/>
+  <Button  onClick={handleSearch}style={{border:'1px solid black',marginTop:'2px'}} >
+    <FcSearch fontSize={30} />
   </Button>
   
 </div>
