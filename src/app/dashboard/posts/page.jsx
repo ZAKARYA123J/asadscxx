@@ -24,24 +24,45 @@ const DataTable = () => {
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
-  const [dialogOpen, setDialogOpen] = useState(false); // State for AddOrderDialog
-  const [selectedPostId, setSelectedPostId] = useState(""); // State for selected postId
-  const [searchTerm, setSearchTerm] = useState(''); // Search input state
-  const [filteredData, setFilteredData] = useState([]); // State for search results
-  const [selectedPostCategory, setSelectedPostCategory] = useState("");
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedPostId, setSelectedPostId] = useState("");
+  const [selectedPostCategory, setSelectedPostCategory] = useState(""); // Added state for selectedPostCategory
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredData, setFilteredData] = useState([]);
   const [selectedCity, setSelectedCity] = useState('');
-const [selectedCategory, setSelectedCategory] = useState('');
-const [selectedStatus, setSelectedStatus] = useState('');
-const uniqueCities = [...new Set(data.map(item => item.ville))];
-const uniqueCategories = [...new Set(data.map(item => item.category?.name))];
-const uniqueStatuses = ['available', 'unavailable', 'taken']; // Predefined statuses
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState('');
+
+  const uniqueCities = [...new Set(data.map(item => item.ville))];
+  const uniqueCategories = [...new Set(data.map(item => item.category?.name))];
+  const uniqueStatuses = ['available', 'unavailable', 'taken'];
 
   useEffect(() => {
-    setMounted(true);
-    setFilteredData(data); // Initialize filtered data with the original data
-  }, [data]);
+    if (mounted) {
+      handleSearch();
+    } else {
+      setMounted(true);
+    }
+  }, [data, searchQuery, selectedCity, selectedCategory, selectedStatus, mounted]);
 
-  if (!mounted) return null;
+  const handleSearch = () => {
+    const searchData = data.filter((item) => {
+      const matchesSearchTerm =
+        item.id.toString().includes(searchQuery) ||
+        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.adress.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.ville.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.category?.name.toLowerCase().includes(searchQuery.toLowerCase());
+
+      const matchesCity = selectedCity === '' || item.ville === selectedCity;
+      const matchesCategory = selectedCategory === '' || item.category?.name === selectedCategory;
+      const matchesStatus = selectedStatus === '' || item.status === selectedStatus;
+
+      return matchesSearchTerm && matchesCity && matchesCategory && matchesStatus;
+    });
+
+    setFilteredData(searchData);
+  };
 
   const handleClickOpen = (id) => {
     setSelectedId(id);
@@ -53,30 +74,29 @@ const uniqueStatuses = ['available', 'unavailable', 'taken']; // Predefined stat
     setSelectedId(null);
   };
 
-  const handleSearch = () => {
-    const searchData = data.filter((item) => {
-      const matchesSearchTerm = 
-        item.id.toString().includes(searchTerm) ||
-        item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.adress.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.ville.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.category?.name.toLowerCase().includes(searchTerm.toLowerCase());
-  
-      const matchesCity = selectedCity === '' || item.ville === selectedCity;
-      const matchesCategory = selectedCategory === '' || item.category?.name === selectedCategory;
-      const matchesStatus = selectedStatus === '' || item.status === selectedStatus;
-  
-      return matchesSearchTerm && matchesCity && matchesCategory && matchesStatus;
-    });
-  
-    setFilteredData(searchData);
-  };
-  
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`https://immoceanrepo.vercel.app/api/posts/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-  const handleDelete = async () => {
-      
-    setFilteredData((prevData) => prevData.filter(item => item.id !== selectedId));
-    handleClose(); // Close the dialog after deletion
+      if (response.ok) {
+        setFilteredData(filteredData.filter(post => post.id !== id));
+        setOpen(false);
+        alert('Post deleted successfully!');
+      } else {
+        console.error('Error deleting post:', await response.text());
+        alert('Error deleting post. Please try again later.');
+      }
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      alert('Error deleting post. Please try again later.');
+    } finally {
+      setOpen(false);
+    }
   };
 
   const handleUpdate = (id) => {
@@ -91,10 +111,10 @@ const uniqueStatuses = ['available', 'unavailable', 'taken']; // Predefined stat
     }
   };
 
-  const handleAddOrder = (postId,category) => {
+  const handleAddOrder = (postId, category) => {
     setSelectedPostId(postId);
+    setSelectedPostCategory(category); // Set selectedPostCategory
     setDialogOpen(true);
-    setSelectedPostCategory(category);
   };
 
   const getStatusIcon = (status) => {
@@ -127,7 +147,6 @@ const uniqueStatuses = ['available', 'unavailable', 'taken']; // Predefined stat
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
-
   return (
     <>
       <div style={{ textAlign: 'right'}}>
@@ -135,6 +154,14 @@ const uniqueStatuses = ['available', 'unavailable', 'taken']; // Predefined stat
           <Button variant="contained">Add <FaPlus style={{ marginLeft: "2px" }} /></Button>
         </Link>
       </div>
+      <TextField
+        label="Search Posts: Id"
+        variant="outlined"
+        fullWidth
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        style={{ marginBottom: '20px' }}
+      />
       <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
   {/* <TextField 
     label="Search" 
@@ -194,8 +221,8 @@ const uniqueStatuses = ['available', 'unavailable', 'taken']; // Predefined stat
       </option>
     ))}
   </TextField>
-  <Button  onClick={handleSearch} style={{ marginTop: '10px' }}>
-    <FcSearch fontSize={30}/>
+  <Button  onClick={handleSearch}style={{border:'1px solid black',marginTop:'2px'}} >
+    <FcSearch fontSize={30} />
   </Button>
   
 </div>
@@ -212,7 +239,6 @@ const uniqueStatuses = ['available', 'unavailable', 'taken']; // Predefined stat
               <TableCell>City</TableCell>
               <TableCell>Category</TableCell>
               <TableCell>Status</TableCell>
-              
               <TableCell align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -228,7 +254,7 @@ const uniqueStatuses = ['available', 'unavailable', 'taken']; // Predefined stat
                   <TableCell>{getStatusIcon(row.status)}</TableCell>
                   <TableCell>
   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-    {row.status === "taken" ? (
+    {row.status === "taken" || row.status === "unavailable" ? (
       row.DateReserve ? (
         <span style={{ color: 'black' }}>Ordered</span>
       ) : (
@@ -240,15 +266,21 @@ const uniqueStatuses = ['available', 'unavailable', 'taken']; // Predefined stat
       </IconButton>
     )}
     <div style={{ display: 'flex', alignItems: 'center' }}>
+    
       <IconButton onClick={() => handleDetail(row.id, row.Detail)}>
         <InfoIcon />
       </IconButton>
-      <IconButton onClick={() => handleUpdate(row.id)} color="primary">
+      {row.status === "available" ? (<IconButton onClick={() => handleUpdate(row.id)} color="primary">
         <EditIcon />
-      </IconButton>
+      </IconButton>):(
+        <p>
+          
+        </p>
+      )}
+      
       <IconButton onClick={() => handleClickOpen(row.id)} style={{ color: 'red' }}>
-        <DeleteIcon />
-      </IconButton>
+                        <DeleteIcon />
+                      </IconButton>
     </div>
   </div>
 </TableCell>
@@ -280,12 +312,13 @@ const uniqueStatuses = ['available', 'unavailable', 'taken']; // Predefined stat
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleDelete} color="secondary" autoFocus>
-            Delete
-          </Button>
+        <Button onClick={handleClose} color="primary">
+  Cancel
+</Button>
+<Button onClick={() => handleDelete(selectedId)} color="secondary" autoFocus>
+  Delete
+</Button>
+
         </DialogActions>
       </Dialog>
 

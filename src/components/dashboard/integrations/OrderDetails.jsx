@@ -1,12 +1,13 @@
 import React, { useContext } from 'react';
 import { DataContext } from '@/contexts/post';
+import { Box, Typography, Paper, Grid, Chip } from '@mui/material';
 
 const OrderDetails = ({ orderId }) => {
   const { order } = useContext(DataContext);
 
   // Filter the orders based on the passed orderId
   const filteredOrder = order?.filter((item) => item.id === orderId);
-  
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const formattedDate = date.toLocaleDateString('en-CA'); // Format as YYYY-MM-DD
@@ -18,33 +19,79 @@ const OrderDetails = ({ orderId }) => {
   };
 
   return (
-    <div>
-      <h2>Order Details</h2>
-      <p>Order ID: {orderId}</p>
+    <Box sx={{ padding: 3 }}>
+      <Typography variant="h4" gutterBottom>
+        Order Details
+      </Typography>
+      <Typography variant="subtitle1" gutterBottom>
+        Order ID: {orderId}
+      </Typography>
 
       {/* Display the filtered order details */}
       {filteredOrder && filteredOrder.length > 0 ? (
         filteredOrder.map((item) => (
-          <div key={item.id}>
-            {/* Display the order details */}
-            <p><strong>Order Created At:</strong> {formatDate(item.createdAt)}</p>
-            <p><strong>Order Updated At:</strong> {formatDate(item.updatedAt)}</p>
-            {item.post && (
-              <>
-                {item.post.title && <p><strong>Post Title:</strong> {item.post.title}</p>}
-                {item.post.status && <p><strong>Post Status:</strong> {item.post.status}</p>}
-                {item.post.address && <p><strong>Post Address:</strong> {item.post.address}</p>}
-              </>
-            )}
-            {/* Add more details as needed */}
-          </div>
+          <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }} key={item.id}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Typography variant="body1">
+                  <strong>Order Created:</strong> {formatDate(item.createdAt)}
+                </Typography>
+                <Typography variant="body1">
+                  <strong>Order Updated:</strong> {formatDate(item.updatedAt)}
+                </Typography>
+                <Typography>
+                  <strong>CIN: </strong>{item.CIN}
+                </Typography>
+              </Grid>
+
+              {item.post && (
+                <>
+                  {item.post.title && (
+                    <Grid item xs={12}>
+                      <Typography variant="body1">
+                        <strong>Post Title:</strong> {item.post.title}
+                      </Typography>
+                    </Grid>
+                  )}
+                  {item.post.status && (
+                    <Grid item xs={12}>
+                      <Typography variant="body1">
+                        <strong>Post Status:</strong> {item.post.status}
+                      </Typography>
+                    </Grid>
+                  )}
+                  {item.post.address && (
+                    <Grid item xs={12}>
+                      <Typography variant="body1">
+                        <strong>Post Address:</strong> {item.post.address}
+                      </Typography>
+                    </Grid>
+                  )}
+                  {item.post.categoryId && (
+                    <Grid item xs={12}>
+                      <Typography variant="body1">
+                        <strong>Post Category:</strong>
+                        {item.post?.categoryId === 1 ? (
+                          <Chip label="Vente" color="primary" />
+                        ) : item.post?.categoryId === 2 ? (
+                          <Chip label="Location" color="secondary" />
+                        ) : (
+                          <Chip label="Other" />
+                        )}
+                      </Typography>
+                    </Grid>
+                  )}
+                </>
+              )}
+            </Grid>
+          </Paper>
         ))
       ) : (
-        <p>No order found with this ID.</p>
+        <Typography variant="body2" color="textSecondary">
+          No order found with this ID.
+        </Typography>
       )}
-
-      {/* Add a button to close the order details */}
-    </div>
+    </Box>
   );
 };
 

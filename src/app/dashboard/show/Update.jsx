@@ -1,12 +1,13 @@
-"use client"
+"use client";
 import React, { useState } from "react";
+import { TextField, Button, Box, Select, MenuItem, InputLabel } from "@mui/material";
 
 export default function Update({ detailId, dataId }) {
   const [formData, setFormData] = useState({
     constructionyear: "",
     surface: "",
     rooms: "",
-    bedrooms: null,
+    bedromms: "",
     livingrooms: "",
     kitchen: "",
     bathrooms: "",
@@ -18,7 +19,7 @@ export default function Update({ detailId, dataId }) {
     pool: "",
     facade: "",
     documents: "",
-    postId: dataId,
+    postId: Number(dataId),
   });
 
   console.log("detail", detailId, "data", dataId);
@@ -54,143 +55,155 @@ export default function Update({ detailId, dataId }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Construction Year:
-        <input
-          type="text"
-          name="constructionyear"
-          value={formData.constructionyear}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Surface:
-        <input
-          type="text"
-          name="surface"
-          value={formData.surface}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Rooms:
-        <input
-          type="text"
-          name="rooms"
-          value={formData.rooms}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Bedrooms:
-        <input
-          type="text"
-          name="bedrooms"
-          value={formData.bedrooms}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Livingrooms:
-        <input
-          type="text"
-          name="livingrooms"
-          value={formData.livingrooms}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Kitchen:
-        <input
-          type="text"
-          name="kitchen"
-          value={formData.kitchen}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Bathrooms:
-        <input
-          type="text"
-          name="bathrooms"
-          value={formData.bathrooms}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Furnished:
-        <input
-          type="text"
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 2, // Spacing between fields
+        maxWidth: "400px",
+        margin: "auto",
+      }}
+    >
+      <TextField
+        label="Construction Year"
+        name="constructionyear"
+        value={formData.constructionyear}
+        onChange={handleChange}
+        fullWidth
+      />
+      <TextField
+        label="Surface"
+        name="surface"
+        value={formData.surface}
+        onChange={handleChange}
+        fullWidth
+      />
+      <TextField
+        label="Rooms"
+        name="rooms"
+        value={formData.rooms}
+        onChange={handleChange}
+        fullWidth
+      />
+      <TextField
+        label="Bedrooms"
+        name="bedrooms"
+        value={formData.bedromms}
+        onChange={handleChange}
+        fullWidth
+      />
+      <TextField
+        label="Living Rooms"
+        name="livingrooms"
+        value={formData.livingrooms}
+        onChange={handleChange}
+        fullWidth
+      />
+      <TextField
+        label="Kitchen"
+        name="kitchen"
+        value={formData.kitchen}
+        onChange={handleChange}
+        fullWidth
+      />
+      <TextField
+        label="Bathrooms"
+        name="bathrooms"
+        value={formData.bathrooms}
+        onChange={handleChange}
+        fullWidth
+      />
+      <div>
+        <InputLabel id="furnished-select-label">Furnished:</InputLabel>
+        <Select
+          labelId="furnished-select-label"
           name="furnished"
           value={formData.furnished}
           onChange={handleChange}
-        />
-      </label>
-      <label>
-        Floor:
-        <input
-          type="text"
-          name="floor"
-          value={formData.floor}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Elevator:
-        <input
-          type="text"
+          fullWidth
+        >
+          <MenuItem value={"Available"}>Available</MenuItem>
+          <MenuItem value={"Not available"}>Not available</MenuItem>
+        </Select>
+      </div>
+      <TextField
+        label="Floor"
+        name="floor"
+        value={formData.floor}
+        onChange={handleChange}
+        fullWidth
+      />
+      <div>
+        <InputLabel id="elevator-select-label">Elevator:</InputLabel>
+        <Select
+          labelId="elevator-select-label"
           name="elevator"
           value={formData.elevator}
           onChange={handleChange}
-        />
-      </label>
-      <label>
-        Parking:
-        <input
-          type="text"
-          name="parking"
-          value={formData.parking}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Balcony:
-        <input
-          type="text"
+          fullWidth
+        >
+          <MenuItem value={"Available"}>Available</MenuItem>
+          <MenuItem value={"Not available"}>Not available</MenuItem>
+        </Select>
+      </div>
+      <div>
+      <InputLabel id="elevator-select-label">Parking:</InputLabel>
+      <Select
+        label="Parking"
+        name="parking"
+        value={formData.parking}
+        onChange={handleChange}
+        fullWidth
+      >
+          <MenuItem value={"Available"}>Available</MenuItem>
+          <MenuItem value={"Not available"}>Not available</MenuItem>
+      </Select>
+      </div>
+      <div>
+        <InputLabel id="balcony-select-label">Balcony:</InputLabel>
+        <Select
+          labelId="balcony-select-label"
           name="balcony"
           value={formData.balcony}
           onChange={handleChange}
-        />
-      </label>
-      <label>
-        Pool:
-        <input
-          type="text"
+          fullWidth
+        >
+          <MenuItem value={"Available"}>Available</MenuItem>
+          <MenuItem value={"Not available"}>Not available</MenuItem>
+        </Select>
+      </div>
+      <div>
+        <InputLabel id="pool-select-label">Pool:</InputLabel>
+        <Select
+          labelId="pool-select-label"
           name="pool"
           value={formData.pool}
           onChange={handleChange}
-        />
-      </label>
-      <label>
-        Facade:
-        <input
-          type="text"
-          name="facade"
-          value={formData.facade}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Documents:
-        <input
-          type="text"
-          name="documents"
-          value={formData.documents}
-          onChange={handleChange}
-        />
-      </label>
-      <button type="submit">Update</button>
-    </form>
+          fullWidth
+        >
+          <MenuItem value={"Available"}>Available</MenuItem>
+          <MenuItem value={"Not available"}>Not available</MenuItem>
+        </Select>
+      </div>
+      <TextField
+        label="Facade"
+        name="facade"
+        value={formData.facade}
+        onChange={handleChange}
+        fullWidth
+      />
+      <TextField
+        label="Documents"
+        name="documents"
+        value={formData.documents}
+        onChange={handleChange}
+        fullWidth
+      />
+      <Button type="submit" variant="contained" color="primary">
+        Update
+      </Button>
+    </Box>
   );
 }

@@ -2,12 +2,14 @@
 import React, { useState, useContext } from 'react';
 import { TextField, Button, Typography, Container, Box, Alert, MenuItem, Select, InputLabel, FormControl,  Grid, Card, CardMedia } from '@mui/material';
 import { DataContext } from '@/contexts/post';
+import { useRouter } from 'next/navigation';
 const CreatePostForm = () => {
   const [formData, setFormData] = useState({
     datePost: '',
     lat: '',
     lon: '',
     prix: '',
+    comment:"",
     adress: '',
     ville: '',
     status: '',
@@ -22,14 +24,14 @@ const CreatePostForm = () => {
   const [errors, setErrors] = useState(null);
 const {category,type}=useContext(DataContext)
 const [imageCount, setImageCount] = useState(0); 
-  
+ const router=useRouter() 
   
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: name === 'lat' || name === 'lon' || name === 'prix' || name === 'typeId' ? Number(value) : value,
+      [name]: name === 'lat' || name === 'lon'  || name === 'typeId' ? Number(value) : value,
     }));
   };
 
@@ -77,6 +79,7 @@ const [imageCount, setImageCount] = useState(0);
       if (response.ok) {
         setResponse(result);
         setErrors(null);
+        router.push(`/dashboard/detail/${result.id}`)
       } else {
         setErrors(result);
       }
@@ -140,7 +143,6 @@ const [imageCount, setImageCount] = useState(0);
           margin="normal"
           required
           fullWidth
-          type="number"
           name="prix"
           label="Price"
           value={formData.prix}
@@ -198,6 +200,19 @@ const [imageCount, setImageCount] = useState(0);
           onChange={handleChange}
         />
         </Grid>
+        </Grid>
+        <Grid container spacing={2}>
+           <Grid item xs={12}>
+           <TextField
+          margin="normal"
+          required
+          fullWidth
+          name="comment"
+          label="Comment"
+          value={formData.comment}
+          onChange={handleChange}
+        />
+           </Grid>
         </Grid>
         <Grid container spacing={2}>
           <Grid item xs={6}>
