@@ -13,7 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { DataContext } from '@/contexts/post'; // Adjust the path accordingly
 import { OrderActions } from '../../OrderActions'; // Import the OrderActions component
-
+import { SelectChangeEvent } from '@mui/material'; // Import the correct type
 export function CompaniesFilters(): React.JSX.Element {
   const { order, loading, error } = useContext(DataContext);
   const [searchQuery, setSearchQuery] = useState('');
@@ -23,8 +23,11 @@ export function CompaniesFilters(): React.JSX.Element {
     setSearchQuery(event.target.value);
   };
 
-  const handleCategoryChange = (event: ChangeEvent<{ value: unknown }>) => {
-    setCategoryId(event.target.value as string);
+  // const handleCategoryChange = (event: ChangeEvent<{ value: unknown }>) => {
+  //   setCategoryId(event.target.value as string);
+  // };
+  const handleCategoryChange = (event: SelectChangeEvent) => {
+    setCategoryId(event.target.value);
   };
 
   const handleDeleteSuccess = () => {
