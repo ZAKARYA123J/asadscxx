@@ -98,12 +98,12 @@ export function CompaniesFilters(): React.JSX.Element {
             <TableHead>
               <TableRow>
                 <TableCell>Order ID</TableCell>
-                <TableCell align="right">Customer Name</TableCell>
+                <TableCell align="right">Customer</TableCell>
                 <TableCell align="right">Date Debut</TableCell>
                 <TableCell align="right">Date Fin</TableCell>
-                {/* <TableCell align="right">CIN</TableCell> */}
+                <TableCell align="right">CIN</TableCell> 
                 <TableCell align="right">Price</TableCell>
-                <TableCell align="right">Actions</TableCell>
+                <TableCell sx={{ textAlign: 'right',paddingRight:"50px" }}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -115,7 +115,7 @@ export function CompaniesFilters(): React.JSX.Element {
                   <TableCell align="right">{order.fullName}</TableCell>
                   <TableCell align="right">{new Date(order.dateDebut).toLocaleDateString()}</TableCell>
                   <TableCell align="right">{order.dateFine}</TableCell>
-                  {/* <TableCell align="right">{order.CIN}</TableCell> */}
+                   <TableCell align="right">{order.CIN}</TableCell> 
                   <TableCell align="right">{order.price} DH</TableCell>
                   <TableCell align="right">
                     <OrderActions orderId={order.id} onDeleteSuccess={handleDeleteSuccess} />

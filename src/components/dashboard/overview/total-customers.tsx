@@ -14,8 +14,11 @@ export interface TotalCustomersProps {
   value: string;
 }
 
-export function TotalCustomers({   sx }: TotalCustomersProps): React.JSX.Element {
-const {order}=React.useContext(DataContext)
+export function TotalCustomers({ sx }: TotalCustomersProps): React.JSX.Element {
+  const { order } = React.useContext(DataContext);
+
+  // Filter orders with categoryId == 1
+  const filteredOrders = order?.filter((item) => item?.post?.categoryId === 1) || [];
 
   return (
     <Card sx={sx}>
@@ -24,7 +27,8 @@ const {order}=React.useContext(DataContext)
           <Stack direction="row" sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }} spacing={3}>
             <Stack spacing={1}>
               <Typography variant="h4">Sold</Typography>
-              <Typography variant="h6">{order?.length || 0} Ordre</Typography>
+              <Typography variant="h6">{order?.length || 0} Ordres</Typography>
+              <Typography variant="h6">{filteredOrders.length} Vente</Typography>
             </Stack>
             {/* <Avatar sx={{ backgroundColor: 'var(--mui-palette-success-main)', height: '56px', width: '56px' }}>
               <UsersIcon fontSize="var(--icon-fontSize-lg)" />
