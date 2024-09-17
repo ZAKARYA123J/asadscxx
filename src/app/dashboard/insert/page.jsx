@@ -2,6 +2,7 @@
 import React, { useState, useContext } from 'react';
 import { TextField, Button, Typography, Container, Box, Alert, MenuItem, Select, InputLabel, FormControl,  Grid, Card, CardMedia } from '@mui/material';
 import { DataContext } from '@/contexts/post';
+import { useRouter } from 'next/navigation';
 const CreatePostForm = () => {
   const [formData, setFormData] = useState({
     datePost: '',
@@ -22,7 +23,7 @@ const CreatePostForm = () => {
   const [errors, setErrors] = useState(null);
 const {category,type}=useContext(DataContext)
 const [imageCount, setImageCount] = useState(0); 
-  
+ const router=useRouter() 
   
 
   const handleChange = (e) => {
@@ -77,6 +78,7 @@ const [imageCount, setImageCount] = useState(0);
       if (response.ok) {
         setResponse(result);
         setErrors(null);
+        router.push(`/dashboard/detail/${result.id}`)
       } else {
         setErrors(result);
       }

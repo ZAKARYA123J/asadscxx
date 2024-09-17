@@ -102,27 +102,27 @@ function Page() {
                   </Grid>
                   <Grid item xs={6}>
                     <Typography>
-                      <strong>Furnished:</strong> {item.furnished ? "Yes" : "No"}
+                      <strong>Furnished:</strong> {item.furnished}
                     </Typography>
                   </Grid>
                   <Grid item xs={6}>
                     <Typography>
-                      <strong>Elevator:</strong> {item.elevator ? "Yes" : "No"}
+                      <strong>Elevator:</strong> {item.elevator}
                     </Typography>
                   </Grid>
                   <Grid item xs={6}>
                     <Typography>
-                      <strong>Parking:</strong> {item.parking ? "Available" : "Not Available"}
+                      <strong>Parking:</strong> {item.parking }
                     </Typography>
                   </Grid>
                   <Grid item xs={6}>
                     <Typography>
-                      <strong>Balcony:</strong> {item.balcony ? "Yes" : "No"}
+                      <strong>Balcony:</strong> {item.balcony }
                     </Typography>
                   </Grid>
                   <Grid item xs={6}>
                     <Typography>
-                      <strong>Pool:</strong> {item.pool ? "Yes" : "No"}
+                      <strong>Pool:</strong> {item.pool }
                     </Typography>
                   </Grid>
                   <Grid item xs={12}>

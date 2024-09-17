@@ -9,21 +9,29 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import CircularProgress from '@mui/material/CircularProgress';
 import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 import { DataContext } from '@/contexts/post'; // Adjust the path accordingly
 import { OrderActions } from '../../OrderActions'; // Import the OrderActions component
 
 export function CompaniesFilters(): React.JSX.Element {
   const { order, loading, error } = useContext(DataContext);
   const [searchQuery, setSearchQuery] = useState('');
+  const [categoryId, setCategoryId] = useState(''); // State for filtering by category
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
+  };
+
+  const handleCategoryChange = (event: ChangeEvent<{ value: unknown }>) => {
+    setCategoryId(event.target.value as string);
   };
 
   const handleDeleteSuccess = () => {
     // You can refresh the orders list after a delete
     console.log('Order deleted, refresh list if necessary');
   };
+
   interface Order {
     id: number;
     fullName: string;
@@ -31,11 +39,19 @@ export function CompaniesFilters(): React.JSX.Element {
     dateFine: string;
     CIN: string;
     price: number;
+    post: {
+      categoryId: number;
+    };
   }
-  const filteredOrders = order.filter((order: Order) =>
-    order.id.toString().includes(searchQuery) || 
-    order.CIN.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+
+  const filteredOrders = order
+    .filter((order: Order) =>
+      order.id.toString().includes(searchQuery) || 
+      order.CIN.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .filter((order: Order) =>
+      categoryId === '' || order.post?.categoryId.toString() === categoryId
+    );
 
   if (loading) {
     return <CircularProgress />;
@@ -47,6 +63,7 @@ export function CompaniesFilters(): React.JSX.Element {
 
   return (
     <div>
+      {/* Search by Order ID or CIN */}
       <TextField
         label="Search Orders: Id CIN"
         variant="outlined"
@@ -55,6 +72,22 @@ export function CompaniesFilters(): React.JSX.Element {
         onChange={handleSearchChange}
         style={{ marginBottom: '20px' }}
       />
+
+      {/* Filter by Category */}
+      <Select
+        value={categoryId}
+        onChange={handleCategoryChange}
+        displayEmpty
+        fullWidth
+        style={{ marginBottom: '20px' }}
+      >
+        <MenuItem value="">
+          <em>All Categories</em>
+        </MenuItem>
+        <MenuItem value="1">Vente</MenuItem>
+        <MenuItem value="2">Location</MenuItem>
+        {/* Add more categories if needed */}
+      </Select>
 
       <Card>
         <TableContainer component={Paper}>
