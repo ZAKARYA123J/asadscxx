@@ -64,7 +64,7 @@ const DetailForm = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:3000/api/details", {
+      const response = await fetch("https://immoceanrepo.vercel.app/api/details", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
