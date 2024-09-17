@@ -19,7 +19,7 @@ const DetailForm = () => {
     constructionyear: "",
     surface: "",
     rooms: "",
-    bedromms: "",
+    bedrooms: "", // Corrected here
     livingrooms: "",
     kitchen: "",
     bathrooms: "",
@@ -33,7 +33,25 @@ const DetailForm = () => {
     documents: "",
     postId: Number(id) || 0,
   });
-
+  
+  // {
+  //   "constructionyear": "2015",
+  //       "surface": "56 m",
+  //       "rooms": "2",
+  //       "bedromms": null,
+  //       "livingrooms": "1",
+  //       "kitchen": "1",
+  //       "bathrooms": "2",
+  //       "furnished": "yes",
+  //       "floor": "yes",
+  //       "elevator": "yes",
+  //       "parking": "yes",
+  //       "balcony": "yes",
+  //       "pool": "yes",
+  //       "facade": "2",
+  //       "documents": "yes",
+  //       "postId":1
+  // }
   const handleChange = (e) => {
     const { name, value } = e.target;
     setDetail((prevDetail) => ({
@@ -46,7 +64,7 @@ const DetailForm = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("https://immoceanrepo.vercel.app/api/details", {
+      const response = await fetch("http://localhost:3000/api/details", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
