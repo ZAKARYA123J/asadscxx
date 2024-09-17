@@ -149,7 +149,7 @@ const DataTable = () => {
   if (error) return <div>{error}</div>;
   return (
     <>
-      <div style={{ textAlign: 'right'}}>
+      <div style={{ textAlign: 'right',marginBottom:"10px"}}>
         <Link href="/dashboard/insert" passHref>
           <Button variant="contained">Add <FaPlus style={{ marginLeft: "2px" }} /></Button>
         </Link>
