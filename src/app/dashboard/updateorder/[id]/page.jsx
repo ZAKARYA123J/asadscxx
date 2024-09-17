@@ -1,10 +1,12 @@
 "use client"
 import { useParams } from 'next/navigation'
-import { useState } from 'react'
+import { useState,useContext,useEffect } from 'react'
 import { TextField, Button, Container, Grid, Typography } from '@mui/material'
 import {  useRouter} from 'next/navigation'
+import { DataContext } from '@/contexts/post'
 export default function MyComponent() {
   const params = useParams();
+  const {order}=useContext(DataContext)
   const [inputData, setInputData] = useState({
     dateDebut: '',
     dateFine: '',
@@ -12,6 +14,20 @@ export default function MyComponent() {
     price: '',
     CIN: ''
   });
+  const filteredData = order?.filter((item) => item.id == params.id)[0];
+
+  useEffect(() => {
+    if (filteredData) {
+      setInputData({
+        ...inputData,
+        dateDebut: filteredData.dateDebut ? new Date(filteredData.dateDebut).toISOString().split('T')[0] : '',
+        dateFine: filteredData.dateFine ? new Date(filteredData.dateFine).toISOString().split('T')[0] : '',
+        fullName: filteredData.fullName || '',
+        price: filteredData.price || '',
+        CIN: filteredData.CIN || '',
+      });
+    }
+  }, [filteredData]);
 const router=useRouter()
   const handleChange = (e) => {
     const { name, value } = e.target;

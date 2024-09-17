@@ -149,7 +149,7 @@ const DataTable = () => {
   if (error) return <div>{error}</div>;
   return (
     <>
-      <div style={{ textAlign: 'right'}}>
+      <div style={{ textAlign: 'right',marginBottom:"10px"}}>
         <Link href="/dashboard/insert" passHref>
           <Button variant="contained">Add <FaPlus style={{ marginLeft: "2px" }} /></Button>
         </Link>
@@ -239,7 +239,8 @@ const DataTable = () => {
               <TableCell>City</TableCell>
               <TableCell>Category</TableCell>
               <TableCell>Status</TableCell>
-              <TableCell align="center">Actions</TableCell>
+              <TableCell>Date post</TableCell>
+              <TableCell align='right' style={{paddingRight:"50px"}}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -252,8 +253,9 @@ const DataTable = () => {
                   <TableCell>{row.ville}</TableCell>
                   <TableCell>{row.category?.name || 'N/A'}</TableCell>
                   <TableCell>{getStatusIcon(row.status)}</TableCell>
-                  <TableCell>
-  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                  <TableCell>{row.datePost}</TableCell>
+                  <TableCell >
+  <div style={{ display: 'flex', alignItems: 'center' ,justifyContent: 'flex-end'}}>
     {row.status === "taken" || row.status === "unavailable" ? (
       row.DateReserve ? (
         <span style={{ color: 'black' }}>Ordered</span>
