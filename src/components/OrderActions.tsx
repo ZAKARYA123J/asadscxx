@@ -31,7 +31,7 @@ export function OrderActions({ orderId, onDeleteSuccess }: OrderActionsProps): R
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      const response = await fetch(`https://immoceanrepo.vercel.app/api/DateReserve/${orderId}`, {
+      const response = await fetch(`http://localhost:3000/api/DateReserve/${orderId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

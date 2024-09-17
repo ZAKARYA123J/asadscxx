@@ -17,7 +17,7 @@ export const DataProvider = ({ children }) => {
   useEffect(()=>{
     const fetchCategorie=async()=>{
       try{
-        const response =await axios.get('https://immoceanrepo.vercel.app/api/categories')
+        const response =await axios.get('http://localhost:3000/api/categories')
         setCategories(response.data)
       }catch (error) {
         handleError(error);
@@ -30,7 +30,7 @@ export const DataProvider = ({ children }) => {
   useEffect(()=>{
 const fetchtype=async()=>{
   try{
-const response=await axios.get('https://immoceanrepo.vercel.app/api/types')
+const response=await axios.get('http://localhost:3000/api/types')
 setTypes(response.data)
   }catch(error){
  console.log('error')
@@ -41,7 +41,7 @@ fetchtype()
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://immoceanrepo.vercel.app/api/posts');
+        const response = await axios.get('http://localhost:3000/api/posts');
         setData(response.data);
       } catch (error) {
         handleError(error);
@@ -57,7 +57,7 @@ fetchtype()
     const fetchDeetail=async()=>{
       setLoading(true)
       try{
-        const response=await axios.get('https://immoceanrepo.vercel.app/api/details')
+        const response=await axios.get('http://localhost:3000/api/details')
         setDetail(response.data)
       }catch(error){
         handleError(error);
@@ -72,7 +72,7 @@ fetchtype()
     const fetchOrders = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('https://immoceanrepo.vercel.app/api/DateReserve');
+        const response = await axios.get('http://localhost:3000/api/DateReserve');
         setOrders(response.data);
       } catch (error) {
         handleError(error);
@@ -99,7 +99,7 @@ fetchtype()
   const createData = async (newData) => {
     setLoading(true);
     try {
-      const response = await axios.post('https://immoceanrepo.vercel.app/api/posts', newData);
+      const response = await axios.post('http://localhost:3000/api/posts', newData);
       setData((prevData) => [...prevData, response.data]);
     } catch (error) {
       handleError(error);
@@ -112,7 +112,7 @@ fetchtype()
   const updateData = async (id, updatedData) => {
     setLoading(true);
     try {
-      const response = await axios.put(`https://immoceanrepo.vercel.app/api/posts/${id}`, updatedData);
+      const response = await axios.put(`http://localhost:3000/api/posts/${id}`, updatedData);
       setData((prevData) =>
         prevData.map((item) => (item.id === id ? response.data : item))
       );
@@ -127,7 +127,7 @@ fetchtype()
   const deleteData = async (id) => {
     setLoading(true);
     try {
-      await axios.delete(`https://immoceanrepo.vercel.app/api/posts/${id}`);
+      await axios.delete(`http://localhost:3000/api/posts/${id}`);
       setData((prevData) => prevData.filter((item) => item.id !== id));
     } catch (error) {
       handleError(error);
@@ -140,7 +140,7 @@ fetchtype()
   const createOrder = async (newOrder) => {
     setLoading(true);
     try {
-      const response = await axios.post('https://immoceanrepo.vercel.app/api/DateReserve', newOrder);
+      const response = await axios.post('http://localhost:3000/api/DateReserve', newOrder);
       setOrders((prevOrders) => [...prevOrders, response.data]);
     } catch (error) {
       handleError(error);
@@ -153,7 +153,7 @@ fetchtype()
   const updateOrder = async (id, updatedOrder) => {
     setLoading(true);
     try {
-      const response = await axios.put(`https://immoceanrepo.vercel.app/api/DateReserve/${id}`, updatedOrder);
+      const response = await axios.put(`http://localhost:3000/api/DateReserve/${id}`, updatedOrder);
       setOrders((prevOrders) =>
         prevOrders.map((order) => (order.id === id ? response.data : order))
       );
@@ -168,7 +168,7 @@ fetchtype()
   const deleteOrder = async (id) => {
     setLoading(true);
     try {
-      await axios.delete(`https://immoceanrepo.vercel.app/api/DateReserve/${id}`);
+      await axios.delete(`http://localhost:3000/api/DateReserve/${id}`);
       setOrders((prevOrders) => prevOrders.filter((order) => order.id !== id));
     } catch (error) {
       handleError(error);

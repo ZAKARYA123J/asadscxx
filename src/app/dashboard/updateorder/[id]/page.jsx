@@ -22,7 +22,7 @@ const router=useRouter()
     e.preventDefault();
 
     try {
-      const response = await fetch(`https://immoceanrepo.vercel.app/api/DateReserve/${params.id}`, {
+      const response = await fetch(`http://localhost:3000/api/DateReserve/${params.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
