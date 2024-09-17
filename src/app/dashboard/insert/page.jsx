@@ -30,7 +30,7 @@ const [imageCount, setImageCount] = useState(0);
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: name === 'lat' || name === 'lon' || name === 'prix' || name === 'typeId' ? Number(value) : value,
+      [name]: name === 'lat' || name === 'lon'  || name === 'typeId' ? Number(value) : value,
     }));
   };
 
@@ -142,7 +142,6 @@ const [imageCount, setImageCount] = useState(0);
           margin="normal"
           required
           fullWidth
-          type="number"
           name="prix"
           label="Price"
           value={formData.prix}

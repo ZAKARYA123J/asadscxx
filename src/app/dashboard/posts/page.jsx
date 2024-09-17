@@ -239,7 +239,6 @@ const DataTable = () => {
               <TableCell>City</TableCell>
               <TableCell>Category</TableCell>
               <TableCell>Status</TableCell>
-              
               <TableCell align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
