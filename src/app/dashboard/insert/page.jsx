@@ -9,6 +9,7 @@ const CreatePostForm = () => {
     lat: '',
     lon: '',
     prix: '',
+    comment:"",
     adress: '',
     ville: '',
     status: '',
@@ -199,6 +200,19 @@ const [imageCount, setImageCount] = useState(0);
           onChange={handleChange}
         />
         </Grid>
+        </Grid>
+        <Grid container spacing={2}>
+           <Grid item xs={12}>
+           <TextField
+          margin="normal"
+          required
+          fullWidth
+          name="comment"
+          label="Comment"
+          value={formData.comment}
+          onChange={handleChange}
+        />
+           </Grid>
         </Grid>
         <Grid container spacing={2}>
           <Grid item xs={6}>
