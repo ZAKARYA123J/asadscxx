@@ -1,8 +1,19 @@
 "use client";
 import React, { useState, useContext } from 'react';
-import { TextField, Button, Typography, Container, Box, Alert, MenuItem, Select, InputLabel, FormControl,  Grid, Card, CardMedia } from '@mui/material';
+import { TextField, Button, Typography, Container, Box, Alert, MenuItem, Select, InputLabel, FormControl, Grid, Card, CardMedia } from '@mui/material';
+import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css'; // Don't forget to import Leaflet's CSS
+import L from 'leaflet'; // Leaflet for custom marker icon
 import { DataContext } from '@/contexts/post';
 import { useRouter } from 'next/navigation';
+
+// Fix for default marker icon in Leaflet
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
+  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+});
 const CreatePostForm = () => {
   const [formData, setFormData] = useState({
     datePost: '',
@@ -87,7 +98,47 @@ const [imageCount, setImageCount] = useState(0);
       setErrors({ error: 'An error occurred while creating the post' });
     }
   };
+ const handleSearch = async () => {
+    try {
+      const apiKey = 'YOUR_OPENCAGE_API_KEY'; // Replace with your OpenCage API key
+      const response = await axios.get(
+        `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}`
+      );
 
+      const data = response.data;
+      if (data.results.length > 0) {
+        const { lat, lng } = data.results[0].geometry;
+        setFormData((prevData) => ({
+          ...prevData,
+          lat,
+          lon: lng,
+        }));
+      } else {
+        setErrors({ search: 'Address not found' });
+      }
+    } catch (error) {
+      console.error('Error fetching geocoding data:', error);
+      setErrors({ search: 'Failed to fetch geocoding data' });
+    }
+  };
+
+  const LocationMarker = () => {
+    const map = useMapEvents({
+      click(e) {
+        const { lat, lng } = e.latlng;
+        setFormData((prevData) => ({
+          ...prevData,
+          lat,
+          lon: lng,
+        }));
+        map.flyTo(e.latlng, map.getZoom());
+      },
+    });
+
+    return formData.lat !== 0 && formData.lon !== 0 ? (
+      <Marker position={[formData.lat, formData.lon]} />
+    ) : null;
+  };
   return (
     <Container maxWidth="sm">
       <Typography variant="h4" component="h1" gutterBottom>
@@ -98,6 +149,21 @@ const [imageCount, setImageCount] = useState(0);
 
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
       <Grid container spacing={2}>
+      <Grid item xs={12}>
+            <MapContainer  center={[31.7917, -7.0926]} // Coordinates for Morocco
+  zoom={6} // Adjusted zoom level for Morocco
+  scrollWheelZoom={false}
+  style={{ height: '500px', width: '100%' }} >
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              />
+              <LocationMarker />
+            </MapContainer>
+            <Typography variant="body2">
+              Click on the map to select a location.
+            </Typography>
+          </Grid>
         <Grid item xs={6}>
         <TextField
           margin="normal"
@@ -112,33 +178,6 @@ const [imageCount, setImageCount] = useState(0);
         />
         </Grid>
         <Grid item xs={6}>
-      
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          type="number"
-          name="lat"
-          label="Latitude"
-          value={formData.lat}
-          onChange={handleChange}
-        />
-        </Grid>
-        </Grid>
-        <Grid container spacing={2}>
-          <Grid item xs={6}>
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          type="number"
-          name="lon"
-          label="Longitude"
-          value={formData.lon}
-          onChange={handleChange}
-        />
-        </Grid>
-        <Grid item xs={6}>
         <TextField
           margin="normal"
           required
@@ -150,6 +189,34 @@ const [imageCount, setImageCount] = useState(0);
         />
      
         </Grid>
+        {/* <Grid item xs={6}>
+      
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          type="number"
+          name="lat"
+          label="Latitude"
+          value={formData.lat}
+          onChange={handleChange}
+        />
+        </Grid> */}
+        </Grid>
+        <Grid container spacing={2}>
+          {/* <Grid item xs={6}>
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          type="number"
+          name="lon"
+          label="Longitude"
+          value={formData.lon}
+          onChange={handleChange}
+        />
+        </Grid> */}
+        
         </Grid>
         <Grid container spacing={2}>
           <Grid item xs={6}>
