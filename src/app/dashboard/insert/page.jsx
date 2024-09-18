@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useContext } from 'react';
-import { TextField, Button, Typography, Container, Box, Alert, MenuItem, Select, InputLabel, FormControl,  Grid, Card, CardMedia } from '@mui/material';
+import { TextField, Button, Typography, Container, Box, Alert, MenuItem, Select, InputLabel, FormControl,  Grid, Card, CardMedia,TextareaAutosize } from '@mui/material';
 import { DataContext } from '@/contexts/post';
 import { useRouter } from 'next/navigation';
 const CreatePostForm = () => {
