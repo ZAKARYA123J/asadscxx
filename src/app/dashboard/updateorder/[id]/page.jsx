@@ -100,6 +100,7 @@ const router=useRouter()
             <TextField
               fullWidth
               name="price"
+              type='number'
               label="Price"
               value={inputData.price}
               onChange={handleChange}
