@@ -240,6 +240,7 @@ const router=useRouter()
                   )}
                 </Grid>
               </Paper>
+              <Typography><strong>Comment:</strong> {item.comment}</Typography>
             </Grid>
           ))
         ) : (
