@@ -21,6 +21,7 @@ import Update from "../Update";
 
 function Page() {
   const { id } = useParams();
+  console.log(id)
   const { detail, data } = useContext(DataContext);
 
   // Filter details based on postId
@@ -63,7 +64,7 @@ const router=useRouter()
   };
 
   // Handle the delete action
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
     try {
       const response = await fetch(`https://immoceanrepo.vercel.app/api/posts/${id}`, {
         method: 'DELETE',
