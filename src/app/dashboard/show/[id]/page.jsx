@@ -112,17 +112,27 @@ function Page() {
                   </Grid>
                   <Grid item xs={6}>
                     <Typography>
-                      <strong>Parking:</strong> {item.parking }
+                      <strong>Parking:</strong> {item.parking}
                     </Typography>
                   </Grid>
                   <Grid item xs={6}>
                     <Typography>
-                      <strong>Balcony:</strong> {item.balcony }
+                      <strong>Balcony:</strong> {item.balcony}
                     </Typography>
                   </Grid>
                   <Grid item xs={6}>
                     <Typography>
-                      <strong>Pool:</strong> {item.pool }
+                      <strong>Pool:</strong> {item.pool}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Typography>
+                      <strong>Guard:</strong> {item.Guard}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Typography>
+                      <strong>Proprietary:</strong> {item.Proprietary}
                     </Typography>
                   </Grid>
                   <Grid item xs={12}>

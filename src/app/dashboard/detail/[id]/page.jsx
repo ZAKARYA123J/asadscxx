@@ -30,28 +30,32 @@ const DetailForm = () => {
     balcony: "",
     pool: "",
     facade: "",
+    Guard:"",
+    Proprietary:"",
     documents: "",
     postId: Number(id) || 0,
   });
   
-  // {
-  //   "constructionyear": "2015",
-  //       "surface": "56 m",
-  //       "rooms": "2",
-  //       "bedromms": null,
-  //       "livingrooms": "1",
-  //       "kitchen": "1",
-  //       "bathrooms": "2",
-  //       "furnished": "yes",
-  //       "floor": "yes",
-  //       "elevator": "yes",
-  //       "parking": "yes",
-  //       "balcony": "yes",
-  //       "pool": "yes",
-  //       "facade": "2",
-  //       "documents": "yes",
-  //       "postId":1
-  // }
+  // id               Int     @id @default(autoincrement())
+  // constructionyear String?
+  // surface          String?
+  // rooms            String?
+  // bedromms         String?
+  // livingrooms      String?
+  // kitchen          String?
+  // bathrooms        String?
+  // furnished        String?
+  // floor            String?        
+  // elevator         String?
+  // parking          String?
+  // balcony          String?
+  // pool             String?
+  // facade           String?
+  // documents        String?
+  // postId           Int     @unique
+  // post             Post    @relation(fields: [postId], references: [id])
+  // Guard            String?  // New column
+  // Proprietary      String?  // New column
   const handleChange = (e) => {
     const { name, value } = e.target;
     setDetail((prevDetail) => ({
@@ -89,6 +93,8 @@ const DetailForm = () => {
           balcony: "",
           pool: "",
           facade: "",
+          Guard:"",
+          Proprietary:"",
           documents: "",
           postId: Number(id) || 0,
         });
@@ -205,6 +211,32 @@ const DetailForm = () => {
               <Select
                 name="furnished"
                 value={detail.furnished}
+                onChange={handleChange}
+              >
+                <MenuItem value={"Available"}>Available</MenuItem>
+                <MenuItem value={"Not available"}>Not available</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <FormControl fullWidth>
+              <InputLabel>Proprietary</InputLabel>
+              <Select
+                name="Proprietary"
+                value={detail.Proprietary}
+                onChange={handleChange}
+              >
+                <MenuItem value={"Available"}>Available</MenuItem>
+                <MenuItem value={"Not available"}>Not available</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <FormControl fullWidth>
+              <InputLabel>Guard</InputLabel>
+              <Select
+                name="Guard"
+                value={detail.Guard}
                 onChange={handleChange}
               >
                 <MenuItem value={"Available"}>Available</MenuItem>

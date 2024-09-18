@@ -1,6 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState ,useContext,useEffect} from "react";
 import { TextField, Button, Box, Select, MenuItem, InputLabel } from "@mui/material";
+import { DataContext } from "@/contexts/post";
 
 export default function Update({ detailId, dataId }) {
   const [formData, setFormData] = useState({
@@ -19,11 +20,39 @@ export default function Update({ detailId, dataId }) {
     pool: "",
     facade: "",
     documents: "",
+    Guard: "",
+    Proprietary: "",
     postId: Number(dataId),
   });
+const {detail}=useContext(DataContext)
+  console.log=("detail", detailId, "data", dataId);
+  const filteredData = detail?.filter((item) => item.id == detailId)[0];
 
-  console.log("detail", detailId, "data", dataId);
-
+  useEffect(() => {
+    if (filteredData) {
+      setFormData({
+        ...formData,
+        constructionyear: filteredData.constructionyear || '',
+        surface: filteredData.surface || '',
+        rooms: filteredData.rooms || '',
+        bedromms: filteredData.bedromms || '',
+        livingrooms: filteredData.livingrooms || '',
+        kitchen: filteredData.kitchen || '',
+        bathrooms: filteredData.bathrooms || '',
+        furnished: filteredData.furnished || '',
+        floor: filteredData.floor || '',
+        elevator: filteredData.elevator || '',
+        parking: filteredData.parking || '',
+        balcony: filteredData.balcony || '',
+        pool: filteredData.pool || '',
+        facade: filteredData.facade || '',
+        documents: filteredData.documents || '',
+        Guard: filteredData.Guard || '',
+        Proprietary: filteredData.Proprietary || '',
+        
+      });
+    }
+  }, [filteredData]);
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -55,6 +84,7 @@ export default function Update({ detailId, dataId }) {
   };
 
   return (
+
     <Box
       component="form"
       onSubmit={handleSubmit}
@@ -67,6 +97,7 @@ export default function Update({ detailId, dataId }) {
       }}
     >
       <TextField
+      sx={{ mt: 4 }} 
         label="Construction Year"
         name="constructionyear"
         value={formData.constructionyear}
@@ -101,6 +132,32 @@ export default function Update({ detailId, dataId }) {
         onChange={handleChange}
         fullWidth
       />
+     <div>
+        <InputLabel id="Guard-select-label">Guard:</InputLabel>
+        <Select
+          labelId="Guard"
+          name="Guard"
+          value={formData.Guard}
+          onChange={handleChange}
+          fullWidth
+        >
+          <MenuItem value={"Available"}>Available</MenuItem>
+          <MenuItem value={"Not available"}>Not available</MenuItem>
+        </Select>
+      </div>
+      <div>
+        <InputLabel id="Proprietary-select-label">Proprietary:</InputLabel>
+        <Select
+          labelId="Proprietary"
+          name="Proprietary"
+          value={formData.Proprietary}
+          onChange={handleChange}
+          fullWidth
+        >
+          <MenuItem value={"Available"}>Available</MenuItem>
+          <MenuItem value={"Not available"}>Not available</MenuItem>
+        </Select>
+      </div>
       <TextField
         label="Kitchen"
         name="kitchen"
