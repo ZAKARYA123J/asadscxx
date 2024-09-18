@@ -1,12 +1,12 @@
 "use client";
 import React, { useState, useContext } from 'react';
 import { TextField, Button, Typography, Container, Box, Alert, MenuItem, Select, InputLabel, FormControl, Grid, Card, CardMedia } from '@mui/material';
-import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+// import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css'; // Don't forget to import Leaflet's CSS
 import L from 'leaflet'; // Leaflet for custom marker icon
 import { DataContext } from '@/contexts/post';
 import { useRouter } from 'next/navigation';
-
+import dynamic from 'next/dynamic';
 // Fix for default marker icon in Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -14,6 +14,11 @@ L.Icon.Default.mergeOptions({
   iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
   shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
 });
+const MapContainer = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false });
+const TileLayer = dynamic(() => import('react-leaflet').then(mod => mod.TileLayer), { ssr: false });
+const Marker = dynamic(() => import('react-leaflet').then(mod => mod.Marker), { ssr: false });
+const useMapEvents = dynamic(() => import('react-leaflet').then(mod => mod.useMapEvents), { ssr: false });
+
 const CreatePostForm = () => {
   const [formData, setFormData] = useState({
     datePost: '',
@@ -31,8 +36,8 @@ const CreatePostForm = () => {
     img: [],
   });
 
-  const [response, setResponse] = useState(null);
-  const [errors, setErrors] = useState(null);
+const [response, setResponse] = useState(null);
+const [errors, setErrors] = useState(null);
 const {category,type}=useContext(DataContext)
 const [imageCount, setImageCount] = useState(0); 
  const router=useRouter() 
@@ -98,30 +103,6 @@ const [imageCount, setImageCount] = useState(0);
       setErrors({ error: 'An error occurred while creating the post' });
     }
   };
- const handleSearch = async () => {
-    try {
-      const apiKey = 'YOUR_OPENCAGE_API_KEY'; // Replace with your OpenCage API key
-      const response = await axios.get(
-        `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}`
-      );
-
-      const data = response.data;
-      if (data.results.length > 0) {
-        const { lat, lng } = data.results[0].geometry;
-        setFormData((prevData) => ({
-          ...prevData,
-          lat,
-          lon: lng,
-        }));
-      } else {
-        setErrors({ search: 'Address not found' });
-      }
-    } catch (error) {
-      console.error('Error fetching geocoding data:', error);
-      setErrors({ search: 'Failed to fetch geocoding data' });
-    }
-  };
-
   const LocationMarker = () => {
     const map = useMapEvents({
       click(e) {
@@ -139,6 +120,7 @@ const [imageCount, setImageCount] = useState(0);
       <Marker position={[formData.lat, formData.lon]} />
     ) : null;
   };
+
   return (
     <Container maxWidth="sm">
       <Typography variant="h4" component="h1" gutterBottom>
@@ -216,7 +198,7 @@ const [imageCount, setImageCount] = useState(0);
           onChange={handleChange}
         />
         </Grid> */}
-        
+      
         </Grid>
         <Grid container spacing={2}>
           <Grid item xs={6}>
