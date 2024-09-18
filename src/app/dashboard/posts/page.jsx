@@ -76,7 +76,7 @@ const DataTable = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`https://immoceanrepo.vercel.app/api/posts/${id}`, {
+      const response = await fetch(`http://localhost:3000/api/posts/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

@@ -87,7 +87,7 @@ const UpdatePage = () => {
     }
 
     try {
-      const response = await fetch(`https://immoceanrepo.vercel.app/api/posts/${id}`, {
+      const response = await fetch(`http://localhost:3000/api/posts/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

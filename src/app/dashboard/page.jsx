@@ -48,7 +48,6 @@ export default function Page() {
       <CardComponent
         title="Tasks Progress Details"
         content={<p>Tasks Progress: 75.5%</p>}
-  
       >
         <TasksProgress sx={{ height: '100%' }} value={75.5} />
       </CardComponent>

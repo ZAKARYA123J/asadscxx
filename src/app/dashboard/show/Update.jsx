@@ -34,7 +34,7 @@ export default function Update({ detailId, dataId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:3000/api/api/details/${detailId}`, {
+      const response = await fetch(`http://localhost:3000/api/details/${detailId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
