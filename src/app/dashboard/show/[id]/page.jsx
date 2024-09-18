@@ -2,6 +2,7 @@
 import React, { useContext, useState } from "react";
 import { useParams } from "next/navigation";
 import { DataContext } from "@/contexts/post";
+import { useRouter } from "next/navigation";
 import {
   Grid,
   Typography,
@@ -14,6 +15,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  DialogContentText
 } from "@mui/material";
 import Update from "../Update";
 
@@ -28,26 +30,62 @@ function Page() {
   const filteredData = data?.filter((item) => item.id == id);
 
   // Modal open state and selected detail and data IDs
-  const [open, setOpen] = useState(false);
+  const [openUpdate, setOpenUpdate] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
   const [selectedDetailId, setSelectedDetailId] = useState(null);
   const [selectedDataId, setSelectedDataId] = useState(null);
-
-  // Handle opening the modal and setting the selected detail and data IDs
+  const [selectedDeleteId, setSelectedDeleteId] = useState(null); // State for selected delete ID
+const router=useRouter()
+  // Handle opening the update modal
   const handleUpdate = (detailId, dataId) => {
     setSelectedDetailId(detailId);
     setSelectedDataId(dataId);
-    setOpen(true);
+    setOpenUpdate(true);
   };
 
-  // Handle closing the modal
-  const handleClose = () => {
-    setOpen(false);
+  // Handle closing the update modal
+  const handleCloseUpdate = () => {
+    setOpenUpdate(false);
     setSelectedDetailId(null);
-    setSelectedDataId(null); // Reset selected IDs
+    setSelectedDataId(null);
   };
 
-  const handleDelete = () => {
-    console.log("Delete button clicked");
+  // Handle opening the delete confirmation dialog
+  const handleClickOpenDelete = (id) => {
+    setSelectedDeleteId(id);
+    setOpenDelete(true);
+  };
+
+  // Handle closing the delete confirmation dialog
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
+    setSelectedDeleteId(null);
+  };
+
+  // Handle the delete action
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`https://immoceanrepo.vercel.app/api/posts/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        alert('Post deleted successfully!');
+        setOpenDelete(false);
+        router.push("/dashboard/posts")
+      } else {
+        console.error('Error deleting post:', await response.text());
+        alert('Error deleting post. Please try again later.');
+      }
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      alert('Error deleting post. Please try again later.');
+    } finally {
+      setOpenDelete(false);
+    }
   };
 
   return (
@@ -157,7 +195,7 @@ function Page() {
                   >
                     Update
                   </Button>
-                  <Button variant="outlined" color="error" onClick={handleDelete}>
+                  <Button variant="outlined" color="error" onClick={() => handleClickOpenDelete(item.id)}>
                     Delete
                   </Button>
                 </Box>
@@ -208,16 +246,41 @@ function Page() {
             <Typography variant="body1">No images found for this post.</Typography>
           </Grid>
         )}
+  <Dialog
+          open={openDelete}
+          onClose={handleCloseDelete}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"Confirm Deletion"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Are you sure you want to delete this Post? This action cannot be undone.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDelete} color="primary">
+              Cancel
+            </Button>
+            <Button
+              onClick={() => handleDelete(selectedDeleteId)} // Pass selectedDeleteId to the delete function
+              color="secondary"
+              autoFocus
+            >
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
 
         {/* Update Modal */}
-        <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+        <Dialog open={openUpdate} onClose={handleCloseUpdate} maxWidth="sm" fullWidth>
           <DialogTitle>Update Details</DialogTitle>
           <DialogContent>
             {/* Passing selectedDetailId and selectedDataId to the Update component */}
             <Update detailId={selectedDetailId} dataId={selectedDataId} />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose} color="primary">
+            <Button onClick={handleCloseUpdate} color="primary">
               Close
             </Button>
           </DialogActions>

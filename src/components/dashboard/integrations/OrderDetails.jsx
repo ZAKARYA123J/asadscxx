@@ -42,6 +42,9 @@ const OrderDetails = ({ orderId }) => {
                 <Typography>
                   <strong>CIN: </strong>{item.CIN}
                 </Typography>
+                <Typography>
+                  <strong>Price: </strong>{item.price}
+                </Typography>
               </Grid>
 
               {item.post && (
