@@ -272,7 +272,7 @@ const DataTable = () => {
       <IconButton onClick={() => handleDetail(row.id, row.Detail)}>
         <InfoIcon />
       </IconButton>
-      {row.status === "available" ? (<IconButton onClick={() => handleUpdate(row.id)} color="primary">
+      {row.status === "available" ||row.status === "unavailable"  ? (<IconButton onClick={() => handleUpdate(row.id)} color="primary">
         <EditIcon />
       </IconButton>):(
         <p>

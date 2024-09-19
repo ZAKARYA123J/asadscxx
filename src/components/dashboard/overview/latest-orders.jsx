@@ -48,7 +48,7 @@ export function LatestOrders({ sx }) {
               <TableCell>Customer</TableCell>
               <TableCell sortDirection="desc">Date</TableCell>
               <TableCell>Status</TableCell>
-              <TableCell align="center">Actions</TableCell>
+              <TableCell sx={{ textAlign: 'right',paddingRight:"50px" }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

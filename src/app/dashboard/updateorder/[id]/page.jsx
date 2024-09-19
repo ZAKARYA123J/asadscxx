@@ -58,6 +58,7 @@ const router=useRouter()
     }
   }
 
+
   return (
     <Container component="main" maxWidth="xs">
       <Typography variant="h5" align="center" gutterBottom>
@@ -100,6 +101,7 @@ const router=useRouter()
             <TextField
               fullWidth
               name="price"
+              type='number'
               label="Price"
               value={inputData.price}
               onChange={handleChange}

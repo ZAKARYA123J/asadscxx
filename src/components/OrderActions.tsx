@@ -85,7 +85,7 @@ export function OrderActions({ orderId, onDeleteSuccess }: OrderActionsProps): R
       <Button variant="contained" color="primary" onClick={handleView}>
         View
       </Button>
-      <Button
+      {/* <Button
         variant="contained"
         color="secondary"
         onClick={handleDeleteClick}
@@ -93,7 +93,7 @@ export function OrderActions({ orderId, onDeleteSuccess }: OrderActionsProps): R
         disabled={isDeleting}
       >
         Delete
-      </Button>
+      </Button> */}
       <Button
         variant="contained"
         color="info"
