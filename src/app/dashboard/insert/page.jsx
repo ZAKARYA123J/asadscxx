@@ -1,12 +1,12 @@
 "use client";
 import React, { useState, useContext } from 'react';
 import { TextField, Button, Typography, Container, Box, Alert, MenuItem, Select, InputLabel, FormControl, Grid, Card, CardMedia } from '@mui/material';
-import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, LayersControl, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css'; // Don't forget to import Leaflet's CSS
 import L from 'leaflet'; // Leaflet for custom marker icon
 import { DataContext } from '@/contexts/post';
 import { useRouter } from 'next/navigation';
-
+import axios from 'axios';
 // Fix for default marker icon in Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -35,6 +35,7 @@ const CreatePostForm = () => {
   const [errors, setErrors] = useState(null);
 const {category,type}=useContext(DataContext)
 const [imageCount, setImageCount] = useState(0); 
+const [searchAddress, setSearchAddress] = useState('');
  const router=useRouter() 
   
 
@@ -98,11 +99,11 @@ const [imageCount, setImageCount] = useState(0);
       setErrors({ error: 'An error occurred while creating the post' });
     }
   };
- const handleSearch = async () => {
+  const handleSearch = async () => {
     try {
-      const apiKey = 'YOUR_OPENCAGE_API_KEY'; // Replace with your OpenCage API key
+      const apiKey = 'af85006391dc49f8b68717cb9c1d0e60'; // Replace with your OpenCage API key
       const response = await axios.get(
-        `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}`
+        `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(searchAddress)}&key=${apiKey}`
       );
 
       const data = response.data;
@@ -121,7 +122,6 @@ const [imageCount, setImageCount] = useState(0);
       setErrors({ search: 'Failed to fetch geocoding data' });
     }
   };
-
   const LocationMarker = () => {
     const map = useMapEvents({
       click(e) {
@@ -150,16 +150,43 @@ const [imageCount, setImageCount] = useState(0);
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
       <Grid container spacing={2}>
       <Grid item xs={12}>
-            <MapContainer  center={[31.7917, -7.0926]} // Coordinates for Morocco
-  zoom={6} // Adjusted zoom level for Morocco
+            <TextField
+              label="Search by Address"
+              fullWidth
+              value={searchAddress}
+              onChange={(e) => setSearchAddress(e.target.value)}
+            />
+            <Button variant="contained" onClick={handleSearch} sx={{ mt: 2 }}>
+              Search
+            </Button>
+          </Grid>
+      <Grid item xs={12}>
+      <MapContainer
+  center={[31.7917, -7.0926]} // Coordinates for Morocco
+  zoom={6}
   scrollWheelZoom={false}
-  style={{ height: '500px', width: '100%' }} >
-              <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              />
-              <LocationMarker />
-            </MapContainer>
+  style={{ height: '500px', width: '100%' }}
+>
+  <LayersControl position="topright">
+    {/* Default Map Layer */}
+    <LayersControl.BaseLayer checked name="Map View">
+      <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      />
+    </LayersControl.BaseLayer>
+
+    {/* Satellite Layer */}
+    <LayersControl.BaseLayer name="Satellite View">
+      <TileLayer
+        url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+        attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+      />
+    </LayersControl.BaseLayer>
+  </LayersControl>
+
+  <LocationMarker />
+</MapContainer>
             <Typography variant="body2">
               Click on the map to select a location.
             </Typography>
