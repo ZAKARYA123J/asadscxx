@@ -122,23 +122,26 @@ const [searchAddress, setSearchAddress] = useState('');
       setErrors({ search: 'Failed to fetch geocoding data' });
     }
   };
-  const LocationMarker = () => {
-    const map = useMapEvents({
-      click(e) {
-        const { lat, lng } = e.latlng;
-        setFormData((prevData) => ({
-          ...prevData,
-          lat,
-          lon: lng,
-        }));
-        map.flyTo(e.latlng, map.getZoom());
-      },
-    });
 
-    return formData.lat !== 0 && formData.lon !== 0 ? (
-      <Marker position={[formData.lat, formData.lon]} />
-    ) : null;
-  };
+  if (typeof window !== "undefined") {
+    const LocationMarker = () => {
+      const map = useMapEvents({
+        click(e) {
+          const { lat, lng } = e.latlng;
+          setFormData((prevData) => ({
+            ...prevData,
+            lat,
+            lon: lng,
+          }));
+          map.flyTo(e.latlng, map.getZoom());
+        },
+      });
+  
+      return formData.lat !== 0 && formData.lon !== 0 ? (
+        <Marker position={[formData.lat, formData.lon]} />
+      ) : null;
+    };
+  }
   return (
     <Container maxWidth="sm">
       <Typography variant="h4" component="h1" gutterBottom>
