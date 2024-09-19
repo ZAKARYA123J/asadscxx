@@ -1,18 +1,29 @@
-// MapComponent.js
+"use client"
 import React from 'react';
-import dynamic from 'next/dynamic';
-import { Marker, LayersControl, TileLayer } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, LayersControl } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
 
-// Dynamically import MapContainer without SSR
-const MapContainer = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false });
-
-const MapComponent = ({ formData, setFormData }) => {
-  const LocationMarker = () => {
-    return formData.lat && formData.lon ? <Marker position={[formData.lat, formData.lon]} /> : null;
+const MyMap = ({ setFormData }) => {
+  const handleMapClick = (e) => {
+    const { lat, lng } = e.latlng;
+    console.log(`Clicked on: ${lat}, ${lng}`);
+    
+    // Update formData with lat and lon
+    setFormData(prev => ({
+      ...prev,
+      lat: lat,
+      lon: lng,
+    }));
   };
 
   return (
-    <MapContainer center={[31.7917, -7.0926]} zoom={6} scrollWheelZoom={false} style={{ height: '500px', width: '100%' }}>
+    <MapContainer
+      center={[31.7917, -7.0926]}
+      zoom={6}
+      scrollWheelZoom={false}
+      style={{ height: '400px', width: '100%' }}
+      onClick={handleMapClick} // Add onClick to the MapContainer
+    >
       <LayersControl position="topright">
         <LayersControl.BaseLayer checked name="Map View">
           <TileLayer
@@ -27,9 +38,12 @@ const MapComponent = ({ formData, setFormData }) => {
           />
         </LayersControl.BaseLayer>
       </LayersControl>
-      <LocationMarker />
+
+      <Marker position={[31.7917, -7.0926]} />
+      <Marker position={[33.8697, -7.0926]} />
+      <Marker position={[31.7917, -5.0926]} />
     </MapContainer>
   );
 };
 
-export default MapComponent;
+export default MyMap;
