@@ -16,7 +16,7 @@ export function TotalProfit({ sx }) {
       <CardContent>
         <Stack direction="row" sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }} spacing={3}>
           <Stack spacing={1}>
-            <Typography variant="h4">Category</Typography>
+            <Typography variant="h4">Ordres</Typography>
             <Typography variant="h6">{filteredOrders.length} Vente</Typography>
             <Typography variant="h6">{filteredLocatio.length} Location</Typography>
           </Stack>
