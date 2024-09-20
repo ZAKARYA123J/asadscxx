@@ -38,6 +38,7 @@ const CreatePostForm = () => {
   const { category, type } = useContext(DataContext);
   const [imageCount, setImageCount] = useState(0);
   const [searchAddress, setSearchAddress] = useState('');
+  const [searchCoordinates, setSearchCoordinates] = useState({ lat: null, lon: null }); // 
   const router = useRouter();
 
   const handleChange = (e) => {
@@ -155,19 +156,12 @@ const CreatePostForm = () => {
 
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
         <Grid container spacing={2}>
+          
           <Grid item xs={12}>
-            <TextField
-              label="Search by Address"
-              fullWidth
-              value={searchAddress}
-              onChange={(e) => setSearchAddress(e.target.value)}
-            />
-            <Button variant="contained" onClick={handleSearch} sx={{ mt: 2 }}>
-              Search
-            </Button>
-          </Grid>
-          <Grid item xs={12}>
-          <MyMap setFormData={setFormData} /> {/* Pass setFormData to MyMap */}
+          <MyMap
+              setFormData={setFormData}
+              searchCoordinates={searchCoordinates} // Pass search result coordinates
+            />{/* Pass setFormData to MyMap */}
             <Typography variant="body2">Click on the map to select a location.</Typography>
           </Grid>
           <Grid item xs={6}>
