@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
-import { Grid,TextField ,Button} from '@mui/material';
+import { MapContainer, TileLayer, Marker, LayersControl, useMapEvents, Popup } from 'react-leaflet';
+import { Grid, TextField, Button } from '@mui/material';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import axios from 'axios'; // Import axios for API requests
+
+const { BaseLayer } = LayersControl; // Import BaseLayer for LayersControl
 
 const MyMap = ({ setFormData, searchCoordinates }) => {
   const [selectedPoint, setSelectedPoint] = useState(null);
@@ -26,16 +28,6 @@ const MyMap = ({ setFormData, searchCoordinates }) => {
       setSelectedPoint({ lat: searchCoordinates.lat, lng: searchCoordinates.lng });
     }
   }, [searchCoordinates]);
-
-  const handleMapClick = (e) => {
-    const { lat, lng } = e.latlng;
-    setSelectedPoint({ lat, lng });
-    setFormData((prevData) => ({
-      ...prevData,
-      lat,
-      lon: lng,
-    }));
-  };
 
   const LocationMarker = () => {
     useMapEvents({
@@ -90,7 +82,7 @@ const MyMap = ({ setFormData, searchCoordinates }) => {
     <div>
       {/* Input for address search */}
       <div>
-      <Grid container spacing={2}>
+        <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
               label="Search by Address"
@@ -102,21 +94,31 @@ const MyMap = ({ setFormData, searchCoordinates }) => {
               Search
             </Button>
           </Grid>
-          </Grid>
+        </Grid>
         {errors.search && <p style={{ color: 'red' }}>{errors.search}</p>}
       </div>
 
-      {/* Map Component */}
+      {/* Map Component with LayersControl for switching views */}
       <MapContainer
         center={[31.7917, -7.0926]} // Default map center
-        zoom={6}
+        zoom={10}
         style={{ height: '400px', width: '100%' }}
         ref={mapRef}
       >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
+        <LayersControl position="topright">
+          <BaseLayer checked name="OpenStreetMap">
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            />
+          </BaseLayer>
+          <BaseLayer name="Satellite">
+            <TileLayer
+              url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.opentopomap.org/copyright">OpenTopoMap</a> contributors'
+            />
+          </BaseLayer>
+        </LayersControl>
         <LocationMarker />
       </MapContainer>
     </div>
