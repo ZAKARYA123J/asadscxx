@@ -19,7 +19,7 @@ export function TasksProgress({ value, sx }: TasksProgressProps): React.JSX.Elem
           <Stack direction="row" sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }} spacing={3}>
             <Stack spacing={1}>
              
-              <Typography variant="h4">Status</Typography>
+              <Typography variant="h4">Status :</Typography>
             </Stack>
             {/* <Avatar sx={{ backgroundColor: 'var(--mui-palette-warning-main)', height: '56px', width: '56px' }}>
               <ListBulletsIcon fontSize="var(--icon-fontSize-lg)" />

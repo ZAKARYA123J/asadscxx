@@ -11,11 +11,15 @@ export interface BudgetProps {
 
   trend: 'up' | 'down';
   sx?: SxProps;
+ 
 
 }
-
-export function Budget({   sx,  }: BudgetProps): React.JSX.Element {
+export function Budget({   sx }: BudgetProps): React.JSX.Element {
 const {data}=React.useContext(DataContext)
+
+const filteredOrders = data?.filter((item:any) => item?.categoryId === 1) || [];
+const filteredLocatio = data?.filter((item:any) => item?.categoryId === 2) || [];
+
 
   return (
     <Card sx={sx}>
@@ -23,8 +27,10 @@ const {data}=React.useContext(DataContext)
         <Stack spacing={3}>
           <Stack direction="row" sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }} spacing={3}>
             <Stack spacing={1}>
-              <Typography variant="h4">Total</Typography>
-              <Typography variant="h6">{data?.length || 0} Posts</Typography>
+              <Typography variant="h4">Total :</Typography>
+              <Typography variant="h6">-{data?.length || 0} Posts</Typography>
+              <Typography variant="h6">-{filteredOrders?.length || 0} Vente</Typography>
+              <Typography variant="h6">-{filteredLocatio?.length || 0} Location</Typography>
             </Stack>
             {/* <Avatar sx={{ backgroundColor: 'var(--mui-palette-primary-main)', height: '56px', width: '56px' }}>
               <CurrencyDollarIcon fontSize="var(--icon-fontSize-lg)" />
