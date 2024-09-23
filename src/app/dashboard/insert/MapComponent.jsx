@@ -101,7 +101,7 @@ const MyMap = ({ setFormData, searchCoordinates }) => {
       {/* Map Component with LayersControl for switching views */}
       <MapContainer
         center={[31.7917, -7.0926]} // Default map center
-        zoom={10}
+        zoom={6}
         style={{ height: '400px', width: '100%' }}
         ref={mapRef}
       >
