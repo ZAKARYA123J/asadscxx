@@ -156,7 +156,7 @@ const UpdatePage = () => {
             InputLabelProps={{ shrink: true }}
           />
         </Grid>
-        <Grid item xs={6}>
+        {/* <Grid item xs={6}>
           <TextField
             margin="normal"
             required
@@ -179,7 +179,7 @@ const UpdatePage = () => {
             value={formData.lon}
             onChange={handleChange}
           />
-        </Grid>
+        </Grid> */}
         <Grid item xs={6}>
           <TextField
             margin="normal"

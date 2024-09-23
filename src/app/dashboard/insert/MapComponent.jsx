@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, LayersControl, useMapEvents, Popup } from 'react-leaflet';
 import { Grid, TextField, Button } from '@mui/material';
 import 'leaflet/dist/leaflet.css';
@@ -11,7 +11,6 @@ const MyMap = ({ setFormData, searchCoordinates }) => {
   const [selectedPoint, setSelectedPoint] = useState(null);
   const [searchAddress, setSearchAddress] = useState('');
   const [errors, setErrors] = useState({});
-  const mapRef = useRef(null);
 
   useEffect(() => {
     delete L.Icon.Default.prototype._getIconUrl;
@@ -122,7 +121,6 @@ const MyMap = ({ setFormData, searchCoordinates }) => {
         center={[31.7917, -7.0926]} // Default map center
         zoom={6}
         style={{ height: '400px', width: '100%' }}
-        ref={mapRef}
       >
         <LayersControl position="topright">
           <BaseLayer checked name="OpenStreetMap">
