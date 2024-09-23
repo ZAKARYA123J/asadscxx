@@ -100,7 +100,7 @@ const DataTable = () => {
   };
 
   const handleUpdate = (id) => {
-    router.push(`/dashboard/update/${id}`);
+    router.push(`/dashboard/All/${id}`);
   };
 
   const handleDetail = (id, Detail) => {

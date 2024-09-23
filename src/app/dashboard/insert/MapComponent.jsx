@@ -76,7 +76,6 @@ const MyMap = ({ setFormData, searchCoordinates }) => {
       const response = await axios.get(
         `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(searchAddress)}&key=${apiKey}`
       );
-
       const data = response.data;
       if (data.results.length > 0) {
         const { lat, lng } = data.results[0].geometry;
@@ -95,7 +94,6 @@ const MyMap = ({ setFormData, searchCoordinates }) => {
       setErrors({ search: 'Failed to fetch geocoding data' });
     }
   };
-
   return (
     <div>
       {/* Input for address search */}
