@@ -100,21 +100,24 @@ const MyMap = ({ setFormData, searchCoordinates }) => {
     <div>
       {/* Input for address search */}
       <div>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TextField
-              label="Search by Address"
-              fullWidth
-              value={searchAddress}
-              onChange={(e) => setSearchAddress(e.target.value)}
-            />
-            <Button variant="contained" onClick={handleSearch} sx={{ mt: 2 }}>
-              Search
-            </Button>
-          </Grid>
-        </Grid>
-        {errors.search && <p style={{ color: 'red' }}>{errors.search}</p>}
-      </div>
+  <Grid container spacing={2} alignItems="center">
+    <Grid item xs={10} mb={2}>
+      <TextField
+        label="Search by Address"
+        fullWidth
+        value={searchAddress}
+        onChange={(e) => setSearchAddress(e.target.value)}
+      />
+    </Grid>
+    <Grid item xs={2} mb={2}>
+      <Button variant="contained" onClick={handleSearch} fullWidth >
+        Search
+      </Button>
+    </Grid>
+  </Grid>
+  {errors.search && <p style={{ color: 'red' }}>{errors.search}</p>}
+</div>
+
 
       {/* Map Component with LayersControl for switching views */}
       <MapContainer

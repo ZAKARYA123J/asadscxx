@@ -282,25 +282,26 @@ const UpdatePage = () => {
             onChange={handleChange}
           />
         </Grid>
-      </Grid>
-    </Grid>
-  </Grid>
-  <Grid container spacing={2} sx={{ mt: 2 }}>
-    <Grid item xs={12}>
-      <Button variant="contained" component="label" sx={{ mt: 2 }}>
+        <Grid item xs={6}>
+      <Button variant="contained" component="label" >
         Upload Images
         <input type="file" multiple hidden onChange={handleImageChange} />
       </Button>
       <Typography sx={{ mt: 2 }}>{imageCount} image(s) selected.</Typography>
     </Grid>
+      </Grid>
+    </Grid>
+  </Grid>
+  <Grid container spacing={2} sx={{ mt: 2 }}>
+   
     <Grid container spacing={2} sx={{ mt: 2 }}>
       {formData.img.length > 0 &&
         formData.img.map((image, index) => (
-          <Grid item xs={6} sm={4} key={index}>
+          <Grid item xs={12} sm={6} key={index}>
             <Card>
               <CardMedia
                 component="img"
-                height="140"
+                height="200"
                 image={image}
                 alt={`Selected image ${index + 1}`}
               />
@@ -310,7 +311,7 @@ const UpdatePage = () => {
     </Grid>
   </Grid>
 
-  <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+  <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 ,maxWidth:200}}>
     Update Post
   </Button>
 </Box>
