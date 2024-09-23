@@ -3,17 +3,16 @@ import { MapContainer, TileLayer, Marker, LayersControl, useMapEvents, Popup } f
 import { Grid, TextField, Button } from '@mui/material';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import axios from 'axios'; // Import axios for API requests
+import axios from 'axios';
 
-const { BaseLayer } = LayersControl; // Import BaseLayer for LayersControl
+const { BaseLayer } = LayersControl;
 
 const MyMap = ({ setFormData, searchCoordinates }) => {
   const [selectedPoint, setSelectedPoint] = useState(null);
-  const [searchAddress, setSearchAddress] = useState(''); // State for the search address
+  const [searchAddress, setSearchAddress] = useState('');
   const [errors, setErrors] = useState({});
   const mapRef = useRef(null);
 
-  // Modify default marker icons in a useEffect hook
   useEffect(() => {
     delete L.Icon.Default.prototype._getIconUrl;
     L.Icon.Default.mergeOptions({
@@ -29,16 +28,37 @@ const MyMap = ({ setFormData, searchCoordinates }) => {
     }
   }, [searchCoordinates]);
 
+  const reverseGeocode = async (lat, lng) => {
+    try {
+      const apiKey = 'af85006391dc49f8b68717cb9c1d0e60'; // Replace with your OpenCage API key
+      const response = await axios.get(
+        `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lng}&key=${apiKey}`
+      );
+      const data = response.data;
+      if (data.results.length > 0) {
+        const { formatted, components } = data.results[0];
+        const city = components.city || components.town || components.village || '';
+        const address = formatted || '';
+
+        setFormData((prevData) => ({
+          ...prevData,
+          adress: address,
+          ville: city,
+          lat,
+          lon: lng,
+        }));
+      }
+    } catch (error) {
+      console.error('Error with reverse geocoding:', error);
+    }
+  };
+
   const LocationMarker = () => {
     useMapEvents({
       click(e) {
         const { lat, lng } = e.latlng;
         setSelectedPoint({ lat, lng });
-        setFormData((prevData) => ({
-          ...prevData,
-          lat,
-          lon: lng,
-        }));
+        reverseGeocode(lat, lng); // Call reverse geocoding when a point is clicked
       },
     });
 
@@ -51,7 +71,6 @@ const MyMap = ({ setFormData, searchCoordinates }) => {
     ) : null;
   };
 
-  // Handle search for address using OpenCage API
   const handleSearch = async () => {
     try {
       const apiKey = 'af85006391dc49f8b68717cb9c1d0e60'; // Replace with your OpenCage API key
@@ -68,7 +87,7 @@ const MyMap = ({ setFormData, searchCoordinates }) => {
           lon: lng,
         }));
         setSelectedPoint({ lat, lng }); // Update map position
-        setErrors({}); // Clear previous errors
+        setErrors({});
       } else {
         setErrors({ search: 'Address not found' });
       }

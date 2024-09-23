@@ -1,8 +1,16 @@
 "use client";
 import React, { useState, useContext, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { useParams } from 'next/navigation';
 import { TextField, Button, Typography, Container, Box, Alert, MenuItem, Select, InputLabel, FormControl, Grid, Card, CardMedia } from '@mui/material';
 import { DataContext } from '@/contexts/post';
+const MyMap = dynamic(
+  () => import('../../insert/MapComponent'),
+  { 
+    loading: () => <p>A map is loading...</p>,  // Fallback UI while loading
+    ssr: false  // Disable server-side rendering
+  }
+);
 
 const UpdatePage = () => {
   const { id } = useParams();
@@ -26,7 +34,7 @@ const UpdatePage = () => {
   const [errors, setErrors] = useState(null);
   const { category, type, data } = useContext(DataContext);
   const [imageCount, setImageCount] = useState(0);
-
+  const [searchCoordinates, setSearchCoordinates] = useState({ lat: null, lon: null }); // 
   // Filter the data to get the item with matching id
   const filteredData = data?.filter((item) => item.id == id)[0];
 
@@ -109,7 +117,7 @@ const UpdatePage = () => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <>
       <Typography variant="h4" component="h1" gutterBottom>
         Update Post
       </Typography>
@@ -117,147 +125,167 @@ const UpdatePage = () => {
       {response && <Alert severity="success">Success</Alert>}
       
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
-      
-  <Grid container spacing={2} >
-    <Grid item xs={6}>
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        type="date"
-        name="datePost"
-        label="Date Post"
-        value={formData.datePost}
-        onChange={handleChange}
-        InputLabelProps={{ shrink: true }}
+  <Grid container spacing={2}>
+    {/* Left column for map and search */}
+    <Grid item xs={12} sm={6} mt={2}>
+      <MyMap
+        setFormData={setFormData}
+        searchCoordinates={searchCoordinates} // Pass search result coordinates
       />
+      <Typography variant="body2" sx={{ mb: 2 }}>
+        Click on the map to select a location.
+      </Typography>
+      {errors && errors.search && (
+        <Alert severity="error">{errors.search}</Alert>
+      )}
     </Grid>
-    <Grid item xs={6}>
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        type="number"
-        name="lat"
-        label="Latitude"
-        value={formData.lat}
-        onChange={handleChange}
-      />
+
+    {/* Right column for form inputs */}
+    <Grid item xs={12} sm={6}>
+      <Grid container spacing={2}>
+        <Grid item xs={6}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            type="date"
+            name="datePost"
+            label="Date Post"
+            value={formData.datePost}
+            onChange={handleChange}
+            InputLabelProps={{ shrink: true }}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            type="number"
+            name="lat"
+            label="Latitude"
+            value={formData.lat}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            type="number"
+            name="lon"
+            label="Longitude"
+            value={formData.lon}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="prix"
+            label="Price"
+            value={formData.prix}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="adress"
+            label="Address"
+            value={formData.adress}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="ville"
+            label="City"
+            value={formData.ville}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <InputLabel>Status</InputLabel>
+          <Select
+            margin="normal"
+            required
+            fullWidth
+            name="status"
+            value={formData.status}
+            onChange={handleChange}
+          >
+            <MenuItem value="available">Available</MenuItem>
+            <MenuItem value="unavailable">Unavailable</MenuItem>
+          </Select>
+        </Grid>
+        <Grid item xs={6}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="title"
+            label="Title"
+            value={formData.title}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <FormControl fullWidth margin="normal" required>
+            <InputLabel>Category</InputLabel>
+            <Select
+              name="categoryId"
+              value={formData.categoryId}
+              onChange={handleChange}
+              label="Category"
+            >
+              {category.map((category) => (
+                <MenuItem key={category.id} value={category.id}>
+                  {category.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={6}>
+          <FormControl fullWidth margin="normal" required>
+            <InputLabel>Type</InputLabel>
+            <Select
+              name="typeId"
+              value={formData.typeId}
+              onChange={handleChange}
+              label="Type"
+            >
+              {type.map((type) => (
+                <MenuItem key={type.id} value={type.id}>
+                  {type.type}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            type="url"
+            name="youtub"
+            label="YouTube URL"
+            value={formData.youtub}
+            onChange={handleChange}
+          />
+        </Grid>
+      </Grid>
     </Grid>
-    <Grid item xs={6}>
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        type="number"
-        name="lon"
-        label="Longitude"
-        value={formData.lon}
-        onChange={handleChange}
-      />
-    </Grid>
-    <Grid item xs={6}>
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        name="prix"
-        label="Price"
-        value={formData.prix}
-        onChange={handleChange}
-      />
-    </Grid>
-    <Grid item xs={6}>
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        name="adress"
-        label="Address"
-        value={formData.adress}
-        onChange={handleChange}
-      />
-    </Grid>
-    <Grid item xs={6}>
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        name="ville"
-        label="City"
-        value={formData.ville}
-        onChange={handleChange}
-      />
-    </Grid>
-    <Grid item xs={6}>
-      <InputLabel>Status</InputLabel>
-      <Select
-        margin="normal"
-        required
-        fullWidth
-        name="status"
-        value={formData.status}
-        onChange={handleChange}
-      >
-        <MenuItem value="available">Available</MenuItem>
-        <MenuItem value="unavailable">Unavailable</MenuItem>
-      </Select>
-    </Grid>
-    <Grid item xs={6}>
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        name="title"
-        label="Title"
-        value={formData.title}
-        onChange={handleChange}
-      />
-    </Grid>
-    <Grid item xs={6}>
-      <FormControl fullWidth margin="normal" required>
-        <InputLabel>Category</InputLabel>
-        <Select
-          name="categoryId"
-          value={formData.categoryId}
-          onChange={handleChange}
-          label="Category"
-        >
-          {category.map((category) => (
-            <MenuItem key={category.id} value={category.id}>
-              {category.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </Grid>
-    <Grid item xs={6}>
-      <FormControl fullWidth margin="normal" required>
-        <InputLabel>Type</InputLabel>
-        <Select
-          name="typeId"
-          value={formData.typeId}
-          onChange={handleChange}
-          label="Type"
-        >
-          {type.map((type) => (
-            <MenuItem key={type.id} value={type.id}>
-              {type.type}
-            </MenuItem>
-          ))}
-        </Select>
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          type="url"
-          name="youtub"
-          label="YouTube URL"
-          value={formData.youtub}
-          onChange={handleChange}
-        />
-      </FormControl>
-    </Grid>
+  </Grid>
+  <Grid container spacing={2} sx={{ mt: 2 }}>
     <Grid item xs={12}>
       <Button variant="contained" component="label" sx={{ mt: 2 }}>
         Upload Images
@@ -282,18 +310,11 @@ const UpdatePage = () => {
     </Grid>
   </Grid>
 
-   
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-        >
-          Update Post
-        </Button>
-            
-      </Box>
-    </Container>
+  <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+    Update Post
+  </Button>
+</Box>
+    </>
   );
 };
 

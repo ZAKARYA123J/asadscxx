@@ -21,7 +21,7 @@ import Update from "../Update";
 
 function Page() {
   const { id } = useParams();
-  console.log(id)
+
   const { detail, data } = useContext(DataContext);
 
   // Filter details based on postId
@@ -35,6 +35,7 @@ function Page() {
   const [openDelete, setOpenDelete] = useState(false);
   const [selectedDetailId, setSelectedDetailId] = useState(null);
   const [selectedDataId, setSelectedDataId] = useState(null);
+  const [searchCoordinates, setSearchCoordinates] = useState({ lat: null, lon: null }); // 
   const [selectedDeleteId, setSelectedDeleteId] = useState(null); // State for selected delete ID
 const router=useRouter()
   // Handle opening the update modal

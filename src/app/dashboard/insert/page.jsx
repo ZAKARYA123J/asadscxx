@@ -73,7 +73,6 @@ const CreatePostForm = () => {
       })
       .catch((error) => console.error('Error converting images:', error));
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true); // Start loading
@@ -152,6 +151,7 @@ const CreatePostForm = () => {
   //   ) : null;
   // };
 
+ 
   return (
     <>
       <Typography variant="h4" component="h1" gutterBottom>
