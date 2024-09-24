@@ -239,7 +239,7 @@ const DataTable = () => {
               <TableCell>City</TableCell>
               <TableCell>Category</TableCell>
               <TableCell>Status</TableCell>
-              <TableCell>Date post</TableCell>
+        
               <TableCell align='right' style={{paddingRight:"50px"}}>Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -253,7 +253,6 @@ const DataTable = () => {
                   <TableCell>{row.ville}</TableCell>
                   <TableCell>{row.category?.name || 'N/A'}</TableCell>
                   <TableCell>{getStatusIcon(row.status)}</TableCell>
-                  <TableCell>{row.datePost}</TableCell>
                   <TableCell >
   <div style={{ display: 'flex', alignItems: 'center' ,justifyContent: 'flex-end'}}>
     {row.status === "taken" || row.status === "unavailable" ? (

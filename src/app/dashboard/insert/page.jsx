@@ -19,7 +19,6 @@ import axios from 'axios';
 
 const CreatePostForm = () => {
   const [formData, setFormData] = useState({
-    datePost: '',
     lat: '',
     lon: '',
     prix: '',
@@ -182,20 +181,6 @@ const CreatePostForm = () => {
     {/* Right column for form inputs */}
     <Grid item xs={12} sm={6}>
       <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            type="date"
-            name="datePost"
-            label="Date Post"
-            value={formData.datePost}
-            onChange={handleChange}
-            InputLabelProps={{ shrink: true }}
-          />
-        </Grid>
-
         <Grid item xs={6}>
           <TextField
             margin="normal"

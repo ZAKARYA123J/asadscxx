@@ -15,7 +15,6 @@ const MyMap = dynamic(
 const UpdateALL = () => {
   const { id } = useParams();
   const [formData, setFormData] = useState({
-    datePost: '',
     lat: '',
     lon: '',
     prix: '',
@@ -54,12 +53,10 @@ const UpdateALL = () => {
   const [searchCoordinates, setSearchCoordinates] = useState({ lat: null, lon: null }); // 
   // Filter the data to get the item with matching id
   const filteredData = data?.filter((item) => item.id == id)[0];
-console.log(filteredData)
   useEffect(() => {
     if (filteredData) {
       setFormData({
         ...formData,
-        datePost: filteredData.datePost || '',
         lat: filteredData.lat || '',
         lon: filteredData.lon || '',
         prix: filteredData.prix || '',
@@ -71,6 +68,19 @@ console.log(filteredData)
         typeId: filteredData.typeId || '',
         youtub: filteredData.youtub || '',
         img: filteredData.img || [],
+        constructionyear:filteredData.Detail?.constructionyear,
+        surface:filteredData.Detail?.surface,
+        rooms:filteredData.Detail?.rooms,
+        bedromms:filteredData.Detail?.bedromms,
+        furnished:filteredData.Detail?.furnished,
+        floor:filteredData.Detail?.floor,
+        elevator:filteredData.Detail?.elevator,
+        parking:filteredData.Detail?.parking,
+        balcony:filteredData.Detail?.balcony,
+        pool:filteredData.Detail?.pool,
+        facade:filteredData.Detail?.facade,
+        documents:filteredData.Detail?.documents,
+        Guard:filteredData.Detail?.Guard,
       });
     }
   }, [filteredData]);
@@ -159,20 +169,9 @@ console.log(filteredData)
 
     {/* Right column for form inputs */}
     <Grid item xs={12} sm={6}>
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            type="date"
-            name="datePost"
-            label="Date Post"
-            value={formData.datePost}
-            onChange={handleChange}
-            InputLabelProps={{ shrink: true }}
-          />
-        </Grid>
+    <Box sx={{ maxHeight: 450, overflowY: 'auto' }}>
+
+    <Grid container spacing={2}>
         <Grid item xs={6}>
           <TextField
             margin="normal"
@@ -368,8 +367,8 @@ console.log(filteredData)
       onChange={handleChange}
       label="Furnished"
     >
-      <MenuItem value="yes">Yes</MenuItem>
-      <MenuItem value="no">No</MenuItem>
+       <MenuItem value={"Available"}>Available</MenuItem>
+       <MenuItem value={"Not available"}>Not available</MenuItem>
     </Select>
   </FormControl>
 </Grid>
@@ -394,8 +393,8 @@ console.log(filteredData)
       onChange={handleChange}
       label="Elevator"
     >
-      <MenuItem value="yes">Yes</MenuItem>
-      <MenuItem value="no">No</MenuItem>
+       <MenuItem value={"Available"}>Available</MenuItem>
+       <MenuItem value={"Not available"}>Not available</MenuItem>
     </Select>
   </FormControl>
 </Grid>
@@ -408,8 +407,8 @@ console.log(filteredData)
       onChange={handleChange}
       label="Parking"
     >
-      <MenuItem value="yes">Yes</MenuItem>
-      <MenuItem value="no">No</MenuItem>
+    <MenuItem value={"Available"}>Available</MenuItem>
+    <MenuItem value={"Not available"}>Not available</MenuItem>
     </Select>
   </FormControl>
 </Grid>
@@ -422,8 +421,8 @@ console.log(filteredData)
       onChange={handleChange}
       label="Balcony"
     >
-      <MenuItem value="yes">Yes</MenuItem>
-      <MenuItem value="no">No</MenuItem>
+      <MenuItem value={"Available"}>Available</MenuItem>
+      <MenuItem value={"Not available"}>Not available</MenuItem>
     </Select>
   </FormControl>
 </Grid>
@@ -436,8 +435,8 @@ console.log(filteredData)
       onChange={handleChange}
       label="Pool"
     >
-      <MenuItem value="yes">Yes</MenuItem>
-      <MenuItem value="no">No</MenuItem>
+       <MenuItem value={"Available"}>Available</MenuItem>
+       <MenuItem value={"Not available"}>Not available</MenuItem>
     </Select>
   </FormControl>
 </Grid>
@@ -462,14 +461,18 @@ console.log(filteredData)
   />
 </Grid>
 <Grid item xs={6}>
-  <TextField
-    margin="normal"
-    fullWidth
-    name="Guard"
-    label="Guard Service"
-    value={formData.Guard}
-    onChange={handleChange}
-  />
+<FormControl fullWidth margin="normal" required>
+    <InputLabel>Guard service</InputLabel>
+    <Select
+      name="Guard"
+      value={formData.Guard}
+      onChange={handleChange}
+      label="Guard"
+    >
+       <MenuItem value={"Available"}>Available</MenuItem>
+       <MenuItem value={"Not available"}>Not available</MenuItem>
+    </Select>
+  </FormControl>
 </Grid>
 
         <Grid item xs={6}>
@@ -480,6 +483,10 @@ console.log(filteredData)
       <Typography sx={{ mt: 2 }}>{imageCount} image(s) selected.</Typography>
     </Grid>
       </Grid>
+
+    </Box>
+
+     
     </Grid>
   </Grid>
 
@@ -500,6 +507,7 @@ console.log(filteredData)
           </Grid>
         ))}
     </Grid>
+    
   </Grid>
 
   <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 ,maxWidth:200}}>
