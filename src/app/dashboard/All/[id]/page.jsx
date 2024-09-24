@@ -2,7 +2,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useParams } from 'next/navigation';
-import { TextField, Button, Typography, Container, Box, Alert, MenuItem, Select, InputLabel, FormControl, Grid, Card, CardMedia } from '@mui/material';
+import { TextField, Button, Typography, Container, Box, Alert, MenuItem, Select, InputLabel, FormControl, Grid, Card, CardMedia,CircularProgress  } from '@mui/material';
 import { DataContext } from '@/contexts/post';
 const MyMap = dynamic(
   () => import('../../insert/MapComponent'),
@@ -49,6 +49,7 @@ const UpdateALL = () => {
   const [response, setResponse] = useState(null);
   const [errors, setErrors] = useState(null);
   const { category, type, data } = useContext(DataContext);
+  const [loading, setLoading] = useState(false); // Loading state
   const [imageCount, setImageCount] = useState(0);
   const [searchCoordinates, setSearchCoordinates] = useState({ lat: null, lon: null }); // 
   // Filter the data to get the item with matching id
@@ -115,7 +116,7 @@ const UpdateALL = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true); // Start loading
    
 
     try {
@@ -138,6 +139,7 @@ const UpdateALL = () => {
     } catch (error) {
       setErrors({ error: 'An error occurred while updating the post' });
     }
+    setLoading(false); // Stop loading
   };
 
   return (
@@ -507,9 +509,15 @@ const UpdateALL = () => {
     
   </Grid>
 
-  <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 ,maxWidth:200}}>
-    Update Post
-  </Button>
+  <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          sx={{ mt: 3, mb: 2, maxWidth: 200 }}
+          disabled={loading}  // Disable button while loading
+        >
+          {loading ? <CircularProgress size={24} /> : 'Update Post'}
+        </Button>
 </Box>
     </>
   );
