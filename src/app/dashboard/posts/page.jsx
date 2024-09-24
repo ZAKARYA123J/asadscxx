@@ -19,7 +19,7 @@ import { MdAddCard } from "react-icons/md";
 import AddOrderDialog from '../OrderDialog';
 import { FcSearch } from "react-icons/fc";
 const DataTable = () => {
-  const { data, loading, error } = useContext(DataContext);
+  const { data, loading, error,fetchData  } = useContext(DataContext);
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
@@ -86,7 +86,8 @@ const DataTable = () => {
       if (response.ok) {
         setFilteredData(filteredData.filter(post => post.id !== id));
         setOpen(false);
-        alert('Post deleted successfully!');
+        await fetchData();
+        router.refresh()
       } else {
         console.error('Error deleting post:', await response.text());
         alert('Error deleting post. Please try again later.');
@@ -234,7 +235,7 @@ const DataTable = () => {
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
-              <TableCell>Title</TableCell>
+              {/* <TableCell>Title</TableCell> */}
               <TableCell>Address</TableCell>
               <TableCell>City</TableCell>
               <TableCell>Category</TableCell>
@@ -248,7 +249,7 @@ const DataTable = () => {
               filteredData.map((row) => (
                 <TableRow key={row.id}>
                   <TableCell>{row.id}</TableCell> {/* Displaying ID */}
-                  <TableCell>{row.title}</TableCell>
+                  {/* <TableCell>{row.title}</TableCell> */}
                   <TableCell>{row.adress}</TableCell>
                   <TableCell>{row.ville}</TableCell>
                   <TableCell>{row.category?.name || 'N/A'}</TableCell>
