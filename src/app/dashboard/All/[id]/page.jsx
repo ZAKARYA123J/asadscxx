@@ -41,7 +41,7 @@ const UpdateALL = () => {
     pool:"",
     facade:"",
     documents:"",
-    postId:"",
+
     Guard:"",
     id: id
   });
@@ -116,10 +116,7 @@ const UpdateALL = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(formData.datePost)) {
-      setErrors({ datePost: 'Invalid date format. Expected YYYY-MM-DD.' });
-      return;
-    }
+   
 
     try {
       const response = await fetch(`https://immoceanrepo.vercel.app/api/postsDtails/${id}`, {
