@@ -151,6 +151,9 @@ const DataTable = () => {
         return null;
     }
   };
+  const handleRefresh = async () => {
+    await fetchData(); // Call fetchData to refresh data
+  };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -160,6 +163,9 @@ const DataTable = () => {
         <Link href="/dashboard/insert" passHref>
           <Button variant="contained">Add <FaPlus style={{ marginLeft: "2px" }} /></Button>
         </Link>
+        <Button variant="outlined" onClick={handleRefresh} style={{ marginLeft: '10px' }}>
+          Refresh
+        </Button>
       </div>
       <TextField
         label="Search Posts: Id"
@@ -334,7 +340,6 @@ const DataTable = () => {
         open={dialogOpen} 
         onClose={() => {
           setDialogOpen(false);
-          fetchData()
         }
         } 
 

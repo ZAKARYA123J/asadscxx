@@ -12,7 +12,7 @@ const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
     CIN: '',
     postId: selectedPostId || ''
   });
-  const { data } = useContext(DataContext);
+  const { data,fetchData } = useContext(DataContext);
 
   useEffect(() => {
     if (selectedPostId) {
@@ -54,7 +54,7 @@ const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
     
       // Fetch updated data after the successful save
      
-    
+    await fetchData()
       onClose(); // Close the dialog after successful save
   
     } catch (error) {

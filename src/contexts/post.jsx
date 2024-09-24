@@ -38,21 +38,22 @@ setTypes(response.data)
 }
 fetchtype()
   },[])
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('https://immoceanrepo.vercel.app/api/posts');
-        setData(response.data);
-      } catch (error) {
-        handleError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchData = async () => {
+    setLoading(true); // Start loading
+    try {
+      const response = await axios.get('https://immoceanrepo.vercel.app/api/posts');
+      setData(response.data); // Set data on successful fetch
+    } catch (err) {
+      setError('Failed to fetch data'); // Handle errors
+    } finally {
+      setLoading(false); // Stop loading
+    }
+  };
 
+  // Call fetchData when the component mounts
+  useEffect(() => {
     fetchData();
   }, []);
-
   useEffect(()=>{
     const fetchDeetail=async()=>{
       setLoading(true)
@@ -187,6 +188,7 @@ fetchtype()
         loading,
         detail,
         error,
+        fetchData,
         createData,
         updateData,
         deleteData,

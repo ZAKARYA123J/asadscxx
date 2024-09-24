@@ -19,8 +19,6 @@ const {data}=React.useContext(DataContext)
 
 const filteredOrders = data?.filter((item:any) => item?.categoryId === 1) || [];
 const filteredLocatio = data?.filter((item:any) => item?.categoryId === 2) || [];
-
-
   return (
     <Card sx={sx}>
       <CardContent>
