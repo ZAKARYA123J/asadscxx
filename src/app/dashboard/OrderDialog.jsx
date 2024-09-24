@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Select, MenuItem, InputLabel, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button } from '@mui/material';
+import { Select, MenuItem, InputLabel, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button ,CircularProgress} from '@mui/material';
 import { DataContext } from '@/contexts/post';
 
 const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
+  const [loiding,setLoding]=useState(false)
   const [newCustomer, setNewCustomer] = useState({
     fullName: '',
     dateDebut: '',
@@ -28,7 +29,6 @@ const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
       [event.target.name]: event.target.value,
     });
   };
-
   const handlePostChange = (event) => {
     setNewCustomer({ ...newCustomer, postId: event.target.value });
   };
@@ -41,18 +41,22 @@ const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(newCustomer),
+      
       });
-
+      
       if (!response.ok) {
         throw new Error('Failed to save the order');
+        
       }
 
       const result = await response.json();
       console.log('Order saved successfully:', result);
+      setLoding(true)
       onClose(); // Close the dialog after successful save
     } catch (error) {
       console.error('Error saving order:', error);
     }
+    setLoding(false)
   };
 
   const filteredData = selectedPostId

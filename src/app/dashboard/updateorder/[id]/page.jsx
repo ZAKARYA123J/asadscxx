@@ -1,63 +1,69 @@
-"use client"
-import { useParams } from 'next/navigation'
-import { useState,useContext,useEffect } from 'react'
-import { TextField, Button, Container, Grid, Typography } from '@mui/material'
-import {  useRouter} from 'next/navigation'
-import { DataContext } from '@/contexts/post'
+"use client";
+import { useParams } from "next/navigation";
+import { useState, useContext, useEffect } from "react";
+import { TextField, Button, Container, Grid, Typography,CircularProgress } from "@mui/material";
+import { useRouter } from "next/navigation";
+import { DataContext } from "@/contexts/post";
+import { IoReloadSharp } from "react-icons/io5";
 export default function MyComponent() {
   const params = useParams();
-  const {order}=useContext(DataContext)
+  const { order } = useContext(DataContext);
+  const [loading, setLoading] = useState(false); // Corrected here
   const [inputData, setInputData] = useState({
-    dateDebut: '',
-    dateFine: '',
-    fullName: '',
-    price: '',
-    CIN: ''
+    dateDebut: "",
+    dateFine: "",
+    fullName: "",
+    price: "",
+    CIN: "",
   });
+
   const filteredData = order?.filter((item) => item.id == params.id)[0];
 
   useEffect(() => {
     if (filteredData) {
       setInputData({
         ...inputData,
-        dateDebut: filteredData.dateDebut ? new Date(filteredData.dateDebut).toISOString().split('T')[0] : '',
-        dateFine: filteredData.dateFine ? new Date(filteredData.dateFine).toISOString().split('T')[0] : '',
-        fullName: filteredData.fullName || '',
-        price: filteredData.price || '',
-        CIN: filteredData.CIN || '',
+        dateDebut: filteredData.dateDebut ? new Date(filteredData.dateDebut).toISOString().split("T")[0] : "",
+        dateFine: filteredData.dateFine ? new Date(filteredData.dateFine).toISOString().split("T")[0] : "",
+        fullName: filteredData.fullName || "",
+        price: filteredData.price || "",
+        CIN: filteredData.CIN || "",
       });
     }
   }, [filteredData]);
-const router=useRouter()
+
+  const router = useRouter();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setInputData(prevData => ({ ...prevData, [name]: value }));
+    setInputData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Corrected here
 
     try {
       const response = await fetch(`https://immoceanrepo.vercel.app/api/DateReserve/${params.id}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(inputData),
       });
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
 
       const result = await response.json();
-      console.log('Update successful:', result);
-      router.push("/dashboard/orders")
+      console.log("Update successful:", result);
+      router.push("/dashboard/orders");
     } catch (error) {
-      console.error('Error updating data:', error);
+      console.error("Error updating data:", error);
     }
-  }
-
+    setLoading(false); // Corrected here
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -101,7 +107,7 @@ const router=useRouter()
             <TextField
               fullWidth
               name="price"
-              type='number'
+              type="number"
               label="Price"
               value={inputData.price}
               onChange={handleChange}
@@ -117,8 +123,9 @@ const router=useRouter()
             />
           </Grid>
           <Grid item xs={12}>
-            <Button type="submit" fullWidth variant="contained" color="primary">
-              Update
+            <Button type="submit" fullWidth variant="contained" color="primary" disabled={loading}>
+              
+              {loading ? <CircularProgress size={24} /> : "Update"}
             </Button>
           </Grid>
         </Grid>

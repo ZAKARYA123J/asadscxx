@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { 
   Table, TableBody, TableCell, TableContainer, 
   TableHead, TableRow, Paper, Button, IconButton,
-  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle ,TextField
+  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle ,TextField,CircularProgress
 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -24,6 +24,7 @@ const DataTable = () => {
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+  const [loiding,setLoading]=useState(false)
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState("");
   const [selectedPostCategory, setSelectedPostCategory] = useState(""); // Added state for selectedPostCategory
@@ -76,18 +77,21 @@ const DataTable = () => {
 
   const handleDelete = async (id) => {
     try {
+      // Set loading to true at the start
+      setLoading(true);
+      
       const response = await fetch(`https://immoceanrepo.vercel.app/api/posts/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
       });
-
+  
       if (response.ok) {
         setFilteredData(filteredData.filter(post => post.id !== id));
         setOpen(false);
         await fetchData();
-        router.refresh()
+        router.refresh();
       } else {
         console.error('Error deleting post:', await response.text());
         alert('Error deleting post. Please try again later.');
@@ -96,9 +100,11 @@ const DataTable = () => {
       console.error('Error deleting post:', error);
       alert('Error deleting post. Please try again later.');
     } finally {
-      setOpen(false);
+      // Ensure loading is false at the end
+      setLoading(false);
     }
   };
+  
 
   const handleUpdate = (id) => {
     router.push(`/dashboard/All/${id}`);
@@ -317,8 +323,8 @@ const DataTable = () => {
         <Button onClick={handleClose} color="primary">
   Cancel
 </Button>
-<Button onClick={() => handleDelete(selectedId)} color="secondary" autoFocus>
-  Delete
+<Button onClick={() => handleDelete(selectedId)} color="secondary" autoFocus disabled={loading}>
+  {loiding ? <CircularProgress size={24} /> : "Delete"}
 </Button>
 
         </DialogActions>
