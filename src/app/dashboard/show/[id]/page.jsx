@@ -18,6 +18,7 @@ import {
   DialogContentText
 } from "@mui/material";
 import Update from "../Update";
+import Link from "next/link";
 
 function Page() {
   const { id } = useParams();
@@ -189,14 +190,16 @@ const router=useRouter()
 
                 {/* Action Buttons for each item */}
                 <Box display="flex" justifyContent="flex-end" mt={2}>
+                  <Link href={`/dashboard/All/${id}`}> 
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => handleUpdate(item.id, id)} // Pass detail.id and data.id to the handleUpdate function
+                   // Pass detail.id and data.id to the handleUpdate function
                     sx={{ mr: 2 }}
                   >
                     Update
                   </Button>
+                  </Link>
                   <Button variant="outlined" color="error" onClick={() => handleClickOpenDelete(item.id)}>
                     Delete
                   </Button>
@@ -276,18 +279,7 @@ const router=useRouter()
         </Dialog>
 
         {/* Update Modal */}
-        <Dialog open={openUpdate} onClose={handleCloseUpdate} maxWidth="sm" fullWidth>
-          <DialogTitle>Update Details</DialogTitle>
-          <DialogContent>
-            {/* Passing selectedDetailId and selectedDataId to the Update component */}
-            <Update detailId={selectedDetailId} dataId={selectedDataId} />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseUpdate} color="primary">
-              Close
-            </Button>
-          </DialogActions>
-        </Dialog>
+     
       </Grid>
     </Box>
   );
