@@ -76,11 +76,7 @@ const CreatePostForm = () => {
     e.preventDefault();
     setLoading(true); // Start loading
     // Ensure datePost is formatted correctly
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(formData.datePost)) {
-      setErrors({ datePost: 'Invalid date format. Expected YYYY-MM-DD.' });
-      setLoading(false); // Stop loading if error
-      return;
-    }
+
 
     try {
       const response = await fetch('https://immoceanrepo.vercel.app/api/posts', {
