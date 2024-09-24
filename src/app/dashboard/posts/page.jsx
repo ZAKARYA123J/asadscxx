@@ -332,7 +332,13 @@ const DataTable = () => {
 
       <AddOrderDialog 
         open={dialogOpen} 
-        onClose={() => setDialogOpen(false)} 
+        onClose={() => {
+          setDialogOpen(false);
+          fetchData()
+        }
+          
+        } 
+
         category={selectedPostCategory} 
         selectedPostId={selectedPostId || undefined} 
       />

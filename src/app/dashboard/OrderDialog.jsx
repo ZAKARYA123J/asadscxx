@@ -3,7 +3,7 @@ import { Select, MenuItem, InputLabel, Dialog, DialogActions, DialogContent, Dia
 import { DataContext } from '@/contexts/post';
 
 const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
-  const [loiding,setLoding]=useState(false)
+  const [loading, setLoading] = useState(false);
   const [newCustomer, setNewCustomer] = useState({
     fullName: '',
     dateDebut: '',
@@ -29,11 +29,13 @@ const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
       [event.target.name]: event.target.value,
     });
   };
+
   const handlePostChange = (event) => {
     setNewCustomer({ ...newCustomer, postId: event.target.value });
   };
 
   const handleSave = async () => {
+    setLoading(true); 
     try {
       const response = await fetch('https://immoceanrepo.vercel.app/api/DateReserve', {
         method: 'POST',
@@ -41,28 +43,30 @@ const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(newCustomer),
-      
       });
       
       if (!response.ok) {
         throw new Error('Failed to save the order');
-        
       }
 
       const result = await response.json();
       console.log('Order saved successfully:', result);
-      setLoding(true)
+    
+      // Fetch updated data after the successful save
+     
+    
       onClose(); // Close the dialog after successful save
+  
     } catch (error) {
       console.error('Error saving order:', error);
+    } finally {
+      setLoading(false); // Ensure loading is stopped
     }
-    setLoding(false)
   };
 
   const filteredData = selectedPostId
     ? data.filter(item => item.id === selectedPostId)
     : data.filter(item => item.status !== 'unavailable' && item.status !== 'taken');
-
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Add New Order</DialogTitle>
@@ -142,7 +146,9 @@ const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={handleSave} variant="contained">Save</Button>
+        <Button onClick={handleSave} variant="contained" disabled={loading}>
+          {loading ? <CircularProgress size={24} /> : "Save"}
+        </Button>
       </DialogActions>
     </Dialog>
   );
