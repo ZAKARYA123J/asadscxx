@@ -336,7 +336,6 @@ const DataTable = () => {
           setDialogOpen(false);
           fetchData()
         }
-          
         } 
 
         category={selectedPostCategory} 
