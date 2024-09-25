@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { 
   Table, TableBody, TableCell, TableContainer, 
   TableHead, TableRow, Paper, Button, IconButton,
-  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle ,TextField,CircularProgress
+  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle ,TextField,CircularProgress,TablePagination
 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -37,7 +37,8 @@ const DataTable = () => {
   const uniqueCities = [...new Set(data.map(item => item.ville))];
   const uniqueCategories = [...new Set(data.map(item => item.category?.name))];
   const uniqueStatuses = ['available', 'unavailable', 'taken'];
-
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10); // Rows per page
   useEffect(() => {
     if (mounted) {
       handleSearch();
@@ -103,7 +104,14 @@ const DataTable = () => {
       setLoading(false);
     }
   };
-  
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+  const paginatedData = filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const handleUpdate = (id) => {
     router.push(`/dashboard/All/${id}`);
@@ -251,13 +259,12 @@ const DataTable = () => {
               <TableCell>City</TableCell>
               <TableCell>Category</TableCell>
               <TableCell>Status</TableCell>
-        
               <TableCell align='right' style={{paddingRight:"50px"}}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {Array.isArray(filteredData) && filteredData.length > 0 ? (
-              filteredData.map((row) => (
+          {paginatedData.length > 0 ? (
+              paginatedData.map((row) => (
                 <TableRow key={row.id}>
                   <TableCell>{row.id}</TableCell> {/* Displaying ID */}
                   <TableCell>{row.title}</TableCell>
@@ -309,7 +316,17 @@ const DataTable = () => {
               </TableRow>
             )}
           </TableBody>
+          
         </Table>
+
+        <TablePagination
+          component="div"
+          count={filteredData.length}
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </TableContainer>
 
       <Dialog

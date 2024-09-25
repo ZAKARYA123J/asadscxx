@@ -6,6 +6,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import TablePagination from '@mui/material/TablePagination';
 import Paper from '@mui/material/Paper';
 import CircularProgress from '@mui/material/CircularProgress';
 import TextField from '@mui/material/TextField';
@@ -18,20 +19,18 @@ export function CompaniesFilters(): React.JSX.Element {
   const { order, loading, error } = useContext(DataContext);
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryId, setCategoryId] = useState(''); // State for filtering by category
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10); // Rows per page
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
 
-  // const handleCategoryChange = (event: ChangeEvent<{ value: unknown }>) => {
-  //   setCategoryId(event.target.value as string);
-  // };
   const handleCategoryChange = (event: SelectChangeEvent) => {
     setCategoryId(event.target.value);
   };
 
   const handleDeleteSuccess = () => {
-    // You can refresh the orders list after a delete
     console.log('Order deleted, refresh list if necessary');
   };
 
@@ -55,6 +54,17 @@ export function CompaniesFilters(): React.JSX.Element {
     .filter((order: Order) =>
       categoryId === '' || order.post?.categoryId.toString() === categoryId
     );
+
+  const handleChangePage = (event: any, newPage: any) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: any) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const paginatedData = filteredOrders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   if (loading) {
     return <CircularProgress />;
@@ -107,7 +117,7 @@ export function CompaniesFilters(): React.JSX.Element {
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredOrders.map((order: Order) => (
+              {paginatedData.map((order: Order) => (
                 <TableRow key={order.id}>
                   <TableCell component="th" scope="row">
                     {order.id}
@@ -116,7 +126,7 @@ export function CompaniesFilters(): React.JSX.Element {
                   <TableCell align="right">{new Date(order.dateDebut).toLocaleDateString()}</TableCell>
                   <TableCell align="right">{order.dateFine}</TableCell>
                    <TableCell align="right">{order.CIN}</TableCell> 
-                  <TableCell align="right">{order.price} DH</TableCell>
+                  <TableCell align="right">{order.price}</TableCell>
                   <TableCell align="right">
                     <OrderActions orderId={order.id} onDeleteSuccess={handleDeleteSuccess} />
                   </TableCell>
@@ -124,6 +134,14 @@ export function CompaniesFilters(): React.JSX.Element {
               ))}
             </TableBody>
           </Table>
+          <TablePagination
+          component="div"
+          count={filteredOrders.length}
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
         </TableContainer>
       </Card>
     </div>
