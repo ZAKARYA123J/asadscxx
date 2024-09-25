@@ -19,7 +19,7 @@ import { MdAddCard } from "react-icons/md";
 import AddOrderDialog from '../OrderDialog';
 import { FcSearch } from "react-icons/fc";
 const DataTable = () => {
-  const { data, loading, error,fetchData  } = useContext(DataContext);
+  const { data, loading, error,fetchData,fetchOrders} = useContext(DataContext);
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
@@ -91,7 +91,8 @@ const DataTable = () => {
       if (response.ok) {
         setFilteredData(filteredData.filter(post => post.id !== id));
         setOpen(false);
-        await fetchData();
+         await fetchData();
+         await fetchOrders()
       } else {
         console.error('Error deleting post:', await response.text());
         alert('Error deleting post. Please try again later.');

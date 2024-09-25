@@ -64,6 +64,13 @@ const OrderDetails = ({ orderId }) => {
                       </Typography>
                     </Grid>
                   )}
+                  {item.post.title && (
+                    <Grid item xs={12}>
+                      <Typography variant="body1">
+                        <strong>Post id:</strong> {item.post.id}
+                      </Typography>
+                    </Grid>
+                  )}
                   {item.post.status && (
                     <Grid item xs={12}>
                       <Typography variant="body1">

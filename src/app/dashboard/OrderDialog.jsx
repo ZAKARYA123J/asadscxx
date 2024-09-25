@@ -12,7 +12,7 @@ const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
     CIN: '',
     postId: selectedPostId || ''
   });
-  const { data,fetchData } = useContext(DataContext);
+  const { data,fetchData ,fetchOrders} = useContext(DataContext);
 
   useEffect(() => {
     if (selectedPostId) {
@@ -54,9 +54,10 @@ const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
     
       // Fetch updated data after the successful save
      
-    await fetchData()
-      onClose(); // Close the dialog after successful save
   
+      onClose(); // Close the dialog after successful save
+      await fetchData()
+      await fetchOrders()
     } catch (error) {
       console.error('Error saving order:', error);
     } finally {
