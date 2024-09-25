@@ -124,7 +124,7 @@ export function CompaniesFilters(): React.JSX.Element {
                   </TableCell>
                   <TableCell align="right">{order.fullName}</TableCell>
                   <TableCell align="right">{new Date(order.dateDebut).toLocaleDateString()}</TableCell>
-                  <TableCell align="right">{order.dateFine}</TableCell>
+                  <TableCell align="right">{new Date(order.dateFine).toLocaleDateString()}</TableCell>
                    <TableCell align="right">{order.CIN}</TableCell> 
                   <TableCell align="right">{order.price}</TableCell>
                   <TableCell align="right">

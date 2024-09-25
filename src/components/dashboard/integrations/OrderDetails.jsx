@@ -18,6 +18,14 @@ const OrderDetails = ({ orderId }) => {
     return `${formattedDate} ${formattedTime}`;
   };
 
+  // Calculate remaining days from dateFin
+  const calculateTotalDuration = (dateDebut, dateFin) => {
+    const startDate = new Date(dateDebut);
+    const endDate = new Date(dateFin);
+    const timeDiff = endDate - startDate;
+    return Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Total duration in days
+  };
+
   return (
     <Box sx={{ padding: 3 }}>
       <Typography variant="h4" gutterBottom>
@@ -81,6 +89,24 @@ const OrderDetails = ({ orderId }) => {
                         ) : (
                           <Chip label="Other" />
                         )}
+                      </Typography>
+                    </Grid>
+                  )}
+                  {/* Display dateDebut and dateFin */}
+                  {item.dateDebut && (
+                    <Grid item xs={12}>
+                      <Typography variant="body1">
+                        <strong>Start Date:</strong> {formatDate(item.dateDebut)}
+                      </Typography>
+                    </Grid>
+                  )}
+                  {item.dateFine && (  // Fixed typo from dateFine to dateFin
+                    <Grid item xs={12}>
+                      <Typography variant="body1">
+                        <strong>End Date:</strong> {formatDate(item.dateFine)}
+                      </Typography>
+                      <Typography variant="body1" color="error">
+                        <strong>Remaining Days:</strong> {calculateTotalDuration(item.dateDebut, item.dateFine)} days
                       </Typography>
                     </Grid>
                   )}
