@@ -35,7 +35,7 @@ const CreatePostForm = () => {
 
   const [response, setResponse] = useState(null);
   const [errors, setErrors] = useState(null);
-  const { category, type } = useContext(DataContext);
+  const { category, type ,fetchData} = useContext(DataContext);
   const [imageCount, setImageCount] = useState(0);
   const [loading, setLoading] = useState(false); // New loading state
   const [searchAddress, setSearchAddress] = useState('');
@@ -93,6 +93,7 @@ const CreatePostForm = () => {
         setResponse(result);
         setLoading(false); // Stop loading on success
         setErrors(null);
+        await fetchData()
         router.push(`/dashboard/detail/${result.id}`);
       } else {
         setErrors(result);

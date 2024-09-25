@@ -69,7 +69,7 @@ fetchtype()
     fetchDeetail()
   },[])
   // Fetch orders on component mount
-  useEffect(() => {
+
     const fetchOrders = async () => {
       setLoading(true);
       try {
@@ -81,9 +81,11 @@ fetchtype()
         setLoading(false);
       }
     };
+useEffect(()=>{ fetchOrders();}
+,
+[])
+   
 
-    fetchOrders();
-  }, []);
 
   // Handle errors
   const handleError = (error) => {
@@ -189,6 +191,7 @@ fetchtype()
         detail,
         error,
         fetchData,
+        fetchOrders,
         createData,
         updateData,
         deleteData,

@@ -7,7 +7,7 @@ import { DataContext } from "@/contexts/post";
 import { IoReloadSharp } from "react-icons/io5";
 export default function MyComponent() {
   const params = useParams();
-  const { order } = useContext(DataContext);
+  const { order ,fetchOrders} = useContext(DataContext);
   const [loading, setLoading] = useState(false); // Corrected here
   const [inputData, setInputData] = useState({
     dateDebut: "",
@@ -58,6 +58,7 @@ export default function MyComponent() {
 
       const result = await response.json();
       console.log("Update successful:", result);
+      await fetchOrders()
       router.push("/dashboard/orders");
     } catch (error) {
       console.error("Error updating data:", error);

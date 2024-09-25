@@ -1,6 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import { useParams } from "next/navigation";
+import { DataContext } from '@/contexts/post';
 import {
   Grid,
   TextField,
@@ -11,10 +12,14 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+  CircularProgress
 } from "@mui/material";
-
+import { useRouter } from "next/navigation";
 const DetailForm = () => {
   const { id } = useParams();
+  const [loiding,setLoding]=useState(false)
+  const router=useRouter()
+  const {fetchData}=useContext(DataContext)
   const [detail, setDetail] = useState({
     constructionyear: "",
     surface: "",
@@ -66,7 +71,7 @@ const DetailForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoding(true)
     try {
       const response = await fetch("https://immoceanrepo.vercel.app/api/details", {
         method: "POST",
@@ -77,7 +82,6 @@ const DetailForm = () => {
       });
 
       if (response.ok) {
-        alert("Property details submitted successfully!");
         setDetail({
           constructionyear: "",
           surface: "",
@@ -97,15 +101,23 @@ const DetailForm = () => {
           Proprietary:"",
           documents: "",
           postId: Number(id) || 0,
-        });
+          
+        }
+     
+      ); 
+      setLoding(false)
+      await fetchData()
+      router.push("/dashboard/posts")
       } else {
         const errorText = await response.text();
         console.error("Server response:", errorText);
         alert("Failed to submit property details: " + errorText);
+        setLoding(false)
       }
     } catch (error) {
       console.error("Error submitting property details:", error);
       alert("An error occurred while submitting the property details.");
+      setLoding(false)
     }
   };
 
@@ -329,7 +341,7 @@ const DetailForm = () => {
 
           <Grid item xs={12}>
             <Button variant="contained" color="primary" type="submit">
-              Submit
+              {loiding ? <CircularProgress size={24}/> : "Insert"}
             </Button>
           </Grid>
         </Grid>

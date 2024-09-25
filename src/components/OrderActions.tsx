@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -6,6 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Alert, AlertTitle } from '@mui/material';
 import { useRouter } from 'next/navigation';
+import { DataContext } from '@/contexts/post';
  import OrderDetails from './dashboard/integrations/OrderDetails'; // Adjust the path if necessary
 
 interface OrderActionsProps {
@@ -16,6 +17,7 @@ interface OrderActionsProps {
 export function OrderActions({ orderId, onDeleteSuccess }: OrderActionsProps): React.JSX.Element {
   const [open, setOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const {fetchOrders}=useContext(DataContext)
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [alert, setAlert] = useState<React.ReactNode | null>(null); // Store alert component
   const router = useRouter();
@@ -41,21 +43,11 @@ export function OrderActions({ orderId, onDeleteSuccess }: OrderActionsProps): R
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-
-      setAlert(
-        <Alert severity="success" onClose={() => setAlert(null)}>
-          <AlertTitle>Success</AlertTitle>
-          Order with ID {orderId} deleted successfully.
-        </Alert>
-      );
-      onDeleteSuccess(); // Trigger callback to refresh the orders list
+  await fetchOrders()
+      
+    
     } catch (err) {
-      setAlert(
-        <Alert severity="error" onClose={() => setAlert(null)}>
-          <AlertTitle>Error</AlertTitle>
-          Failed to delete the order.
-        </Alert>
-      );
+      console.log("error")
     } finally {
       setIsDeleting(false);
       setConfirmDeleteOpen(false);
@@ -85,7 +77,7 @@ export function OrderActions({ orderId, onDeleteSuccess }: OrderActionsProps): R
       <Button variant="contained" color="primary" onClick={handleView}>
         View
       </Button>
-      {/* <Button
+      <Button
         variant="contained"
         color="secondary"
         onClick={handleDeleteClick}
@@ -93,7 +85,7 @@ export function OrderActions({ orderId, onDeleteSuccess }: OrderActionsProps): R
         disabled={isDeleting}
       >
         Delete
-      </Button> */}
+      </Button>
       <Button
         variant="contained"
         color="info"

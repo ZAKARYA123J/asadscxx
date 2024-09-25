@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import { useParams } from 'next/navigation';
 import { TextField, Button, Typography, Container, Box, Alert, MenuItem, Select, InputLabel, FormControl, Grid, Card, CardMedia,CircularProgress  } from '@mui/material';
 import { DataContext } from '@/contexts/post';
+import { useRouter } from 'next/navigation';
 const MyMap = dynamic(
   () => import('../../insert/MapComponent'),
   { 
@@ -45,10 +46,10 @@ const UpdateALL = () => {
     Guard:"",
     id: id
   });
-
+const router=useRouter()
   const [response, setResponse] = useState(null);
   const [errors, setErrors] = useState(null);
-  const { category, type, data } = useContext(DataContext);
+  const { category, type, data ,fetchData} = useContext(DataContext);
   const [loading, setLoading] = useState(false); // Loading state
   const [imageCount, setImageCount] = useState(0);
   const [searchCoordinates, setSearchCoordinates] = useState({ lat: null, lon: null }); // 
@@ -133,6 +134,8 @@ const UpdateALL = () => {
       if (response.ok) {
         setResponse(result);
         setErrors(null);
+        await fetchData()
+        router.push("/dashboard/posts")
       } else {
         setErrors(result);
       }

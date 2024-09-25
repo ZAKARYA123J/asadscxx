@@ -91,7 +91,6 @@ const DataTable = () => {
         setFilteredData(filteredData.filter(post => post.id !== id));
         setOpen(false);
         await fetchData();
-        router.refresh();
       } else {
         console.error('Error deleting post:', await response.text());
         alert('Error deleting post. Please try again later.');
@@ -247,7 +246,7 @@ const DataTable = () => {
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
-              {/* <TableCell>Title</TableCell> */}
+              <TableCell>Title</TableCell>
               <TableCell>Address</TableCell>
               <TableCell>City</TableCell>
               <TableCell>Category</TableCell>
@@ -261,7 +260,7 @@ const DataTable = () => {
               filteredData.map((row) => (
                 <TableRow key={row.id}>
                   <TableCell>{row.id}</TableCell> {/* Displaying ID */}
-                  {/* <TableCell>{row.title}</TableCell> */}
+                  <TableCell>{row.title}</TableCell>
                   <TableCell>{row.adress}</TableCell>
                   <TableCell>{row.ville}</TableCell>
                   <TableCell>{row.category?.name || 'N/A'}</TableCell>
