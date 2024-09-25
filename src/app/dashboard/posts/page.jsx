@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { 
   Table, TableBody, TableCell, TableContainer, 
   TableHead, TableRow, Paper, Button, IconButton,
-  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle ,TextField,CircularProgress,TablePagination
+  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle ,TextField,CircularProgress,TablePagination,Typography
 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -164,6 +164,13 @@ const DataTable = () => {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
+  const calculateTotalDuration = (dateDebut, dateFin) => {
+    const startDate = new Date(dateDebut);
+    const endDate = new Date(dateFin);
+    const timeDiff = endDate - startDate;
+    return Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Total duration in days
+  };
+
   return (
     <>
       <div style={{ textAlign: 'right',marginBottom:"10px"}}>
@@ -276,7 +283,9 @@ const DataTable = () => {
   <div style={{ display: 'flex', alignItems: 'center' ,justifyContent: 'flex-end'}}>
     {row.status === "taken" || row.status === "unavailable" ? (
       row.DateReserve ? (
-        <span style={{ color: 'black' }}>Ordered</span>
+        <span style={{ color: 'black' }}> <Typography variant="body1" color="error">
+       {calculateTotalDuration(row.DateReserve.dateDebut, row.DateReserve.dateFine)} Days 
+      </Typography></span>
       ) : (
         <span style={{ color: 'red' }}>Taken</span>
       )
