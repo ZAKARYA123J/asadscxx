@@ -37,27 +37,32 @@ const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
   const handleSave = async () => {
     setLoading(true); 
     try {
+      const formattedCustomer = {
+        ...newCustomer,
+        dateDebut: newCustomer.dateDebut ? new Date(newCustomer.dateDebut).toISOString() : '',
+        dateFine: newCustomer.dateFine ? new Date(newCustomer.dateFine).toISOString() : '',
+      };
+  
       const response = await fetch('https://immoceanrepo.vercel.app/api/DateReserve', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newCustomer),
+        body: JSON.stringify(formattedCustomer),
       });
-      
+  
       if (!response.ok) {
         throw new Error('Failed to save the order');
       }
-
+  
       const result = await response.json();
       console.log('Order saved successfully:', result);
-    
-      // Fetch updated data after the successful save
-     
   
+      // Fetch updated data after the successful save
+      await fetchOrders();
+      await fetchData();
+      
       onClose(); // Close the dialog after successful save
-      await fetchData()
-      await fetchOrders()
     } catch (error) {
       console.error('Error saving order:', error);
     } finally {

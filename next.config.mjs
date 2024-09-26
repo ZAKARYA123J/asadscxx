@@ -3,7 +3,7 @@ const nextConfig = {
     async redirects() {
       return [
         {
-          source: '/',
+          source: '/Index',
           destination: '/login',
           permanent: false, // Set to `true` if you want this to be a permanent redirect (HTTP 308)
         },

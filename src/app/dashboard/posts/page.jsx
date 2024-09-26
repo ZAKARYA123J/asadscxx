@@ -33,7 +33,6 @@ const DataTable = () => {
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
-
   const uniqueCities = [...new Set(data.map(item => item.ville))];
   const uniqueCategories = [...new Set(data.map(item => item.category?.name))];
   const uniqueStatuses = ['available', 'unavailable', 'taken'];
@@ -101,7 +100,7 @@ const DataTable = () => {
       console.error('Error deleting post:', error);
       alert('Error deleting post. Please try again later.');
     } finally {
-      // Ensure loading is false at the end
+      // Ensure loading is false at the endw
       setLoading(false);
     }
   };
@@ -126,10 +125,11 @@ const DataTable = () => {
     }
   };
 
-  const handleAddOrder = (postId, category) => {
+  const handleAddOrder =async (postId, category) => {
     setSelectedPostId(postId);
     setSelectedPostCategory(category); // Set selectedPostCategory
     setDialogOpen(true);
+    await fetchData();
   };
 
   const getStatusIcon = (status) => {
@@ -162,7 +162,6 @@ const DataTable = () => {
   const handleRefresh = async () => {
     await fetchData(); // Call fetchData to refresh data
   };
-
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
   const calculateTotalDuration = (dateDebut, dateFin) => {
