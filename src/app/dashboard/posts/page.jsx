@@ -281,7 +281,7 @@ const DataTable = () => {
                   <TableCell>{getStatusIcon(row.status)}</TableCell>
                   <TableCell >
   <div style={{ display: 'flex', alignItems: 'center' ,justifyContent: 'flex-end'}}>
-    {row.status === "taken" || row.status === "unavailable" ? (
+    {(row.status === "taken" && row.categoryId === 1) || row.status === "unavailable" ? (
       row.DateReserve ? (
         <span style={{ color: 'black' }}> <Typography variant="body1" color="error">
        {row.DateReserve.id} Order Id 
