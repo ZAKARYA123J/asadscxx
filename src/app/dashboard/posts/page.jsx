@@ -129,7 +129,7 @@ const DataTable = () => {
     setSelectedPostId(postId);
     setSelectedPostCategory(category); // Set selectedPostCategory
     setDialogOpen(true);
-    await fetchData();
+ 
   };
 
   const getStatusIcon = (status) => {

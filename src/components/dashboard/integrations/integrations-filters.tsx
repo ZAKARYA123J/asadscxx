@@ -14,9 +14,9 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { DataContext } from '@/contexts/post'; // Adjust the path accordingly
 import { OrderActions } from '../../OrderActions'; // Import the OrderActions component
-import { SelectChangeEvent } from '@mui/material'; // Import the correct type
+import { Button, SelectChangeEvent } from '@mui/material'; // Import the correct type
 export function CompaniesFilters(): React.JSX.Element {
-  const { order, loading, error } = useContext(DataContext);
+  const { order, loading, error ,fetchOrders} = useContext(DataContext);
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryId, setCategoryId] = useState(''); // State for filtering by category
   const [page, setPage] = useState(0);
@@ -65,7 +65,7 @@ export function CompaniesFilters(): React.JSX.Element {
   };
 
   const paginatedData = filteredOrders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-
+ 
   if (loading) {
     return <CircularProgress />;
   }
@@ -77,6 +77,7 @@ export function CompaniesFilters(): React.JSX.Element {
   return (
     <div>
       {/* Search by Order ID or CIN */}
+    
       <TextField
         label="Search Orders: Id CIN"
         variant="outlined"

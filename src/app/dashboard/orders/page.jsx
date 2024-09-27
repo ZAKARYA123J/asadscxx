@@ -7,7 +7,7 @@ import { CompaniesFilters } from '@/components/dashboard/integrations/integratio
 import AddOrderDialog from '../OrderDialog';
 
 export default function Page() {
-  const { createOrder, updateOrder } = useContext(DataContext);
+  const { createOrder, updateOrder,fetchOrders } = useContext(DataContext);
 
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -20,7 +20,9 @@ export default function Page() {
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
   };
-
+  const handleRefresh = async () => {
+    await fetchOrders(); // Call fetchData to refresh data
+  };
   const handleSaveOrder = async (updatedOrder) => {
     if (selectedOrder) {
       // Update existing order
@@ -35,12 +37,12 @@ export default function Page() {
   return (
     <Stack spacing={3}>
       <Button
-        startIcon={<PlusIcon fontSize="var(--icon-fontSize-md)" />}
+        
         variant="contained"
-        onClick={() => handleOpenDialog(null)} // Passing null to indicate new order
+        onClick={handleRefresh} // Passing null to indicate new order
         style={{ width: '100px' }}
-      >
-        Add
+      >Refresh
+        
       </Button>
       <AddOrderDialog
         open={isDialogOpen}
