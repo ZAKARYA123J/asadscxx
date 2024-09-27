@@ -284,7 +284,7 @@ const DataTable = () => {
     {row.status === "taken" || row.status === "unavailable" ? (
       row.DateReserve ? (
         <span style={{ color: 'black' }}> <Typography variant="body1" color="error">
-       {calculateTotalDuration(row.DateReserve.dateDebut, row.DateReserve.dateFine)} Days 
+       {row.DateReserve.id} Order Id 
       </Typography></span>
       ) : (
         <span style={{ color: 'red' }}>Taken</span>
