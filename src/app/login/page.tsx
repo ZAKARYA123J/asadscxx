@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { TextField, Button, Box, Typography, Container, Alert } from '@mui/material';
+import { TextField, Button, Box, Typography, Container, Alert ,CircularProgress} from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { useCookies } from 'react-cookie';
 
@@ -8,7 +8,7 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
-
+const [loading,setLodoiding]=useState(false)
   const router = useRouter();
   const [cookies, setCookie] = useCookies(['token']);
 
@@ -22,6 +22,7 @@ const Login: React.FC = () => {
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
+    setLodoiding(true)
   
     try {
       const response = await fetch(' https://immoceanrepo.vercel.app/api/login ', {
@@ -30,10 +31,12 @@ const Login: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
+        
       });
   
       if (!response.ok) {
         throw new Error('Network response was not ok');
+        setLodoiding(false)
       }
   
       const data = await response.json();
@@ -47,6 +50,7 @@ const Login: React.FC = () => {
     } catch (error) {
       setError('Login failed. Please check your email and password and try again.');
       console.error('Login failed:', error);
+      setLodoiding(false)
     }
   };
   
@@ -96,8 +100,9 @@ const Login: React.FC = () => {
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
+          disabled={loading}
         >
-          Sign In
+        {loading ? <CircularProgress/> : "Login"}
         </Button>
       </Box>
     </Container>
