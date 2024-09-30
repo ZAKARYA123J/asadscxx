@@ -52,7 +52,7 @@ const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
         dateFine: newCustomer.dateFine ? new Date(newCustomer.dateFine).toISOString() : '',
       };
 
-      const response = await fetch('http://localhost:3001/api/DateReserve', {
+      const response = await fetch('https://immoceanrepo.vercel.app/api/DateReserve', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
