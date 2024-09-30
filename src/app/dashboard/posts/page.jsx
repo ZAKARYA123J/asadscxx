@@ -282,10 +282,14 @@ const DataTable = () => {
                   <TableCell >
   <div style={{ display: 'flex', alignItems: 'center' ,justifyContent: 'flex-end'}}>
     {(row.status === "taken" && row.categoryId === 1) || row.status === "unavailable" ? (
-      row.DateReserve ? (
-        <span style={{ color: 'black' }}> <Typography variant="body1" color="error">
-       {row.DateReserve?.id} Order Id 
-      </Typography></span>
+      row.DateReserve && Array.isArray(row.DateReserve) ? (
+        row.DateReserve.map((reserve) => (
+          <span key={reserve.id} style={{ color: 'black' }}>
+            <Typography variant="body1" color="error">
+             Id:{reserve.id}  
+            </Typography>
+          </span>
+        ))
       ) : (
         <span style={{ color: 'red' }}>Taken</span>
       )
