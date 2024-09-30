@@ -46,8 +46,7 @@ export function CompaniesFilters(): React.JSX.Element {
     };
   }
 
-  const filteredOrders = order
-    .filter((order: Order) =>
+  const filteredOrders = order.filter((order: Order) =>
       order.id.toString().includes(searchQuery) || 
       order.CIN.toLowerCase().includes(searchQuery.toLowerCase())
     )

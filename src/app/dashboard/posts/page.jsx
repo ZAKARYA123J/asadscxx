@@ -284,7 +284,7 @@ const DataTable = () => {
     {(row.status === "taken" && row.categoryId === 1) || row.status === "unavailable" ? (
       row.DateReserve ? (
         <span style={{ color: 'black' }}> <Typography variant="body1" color="error">
-       {row.DateReserve.id} Order Id 
+       {row.DateReserve?.id} Order Id 
       </Typography></span>
       ) : (
         <span style={{ color: 'red' }}>Taken</span>
@@ -295,7 +295,6 @@ const DataTable = () => {
       </IconButton>
     )}
     <div style={{ display: 'flex', alignItems: 'center' }}>
-    
       <IconButton onClick={() => handleDetail(row.id, row.Detail)}>
         <InfoIcon />
       </IconButton>

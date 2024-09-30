@@ -26,7 +26,6 @@ const CreatePostForm = () => {
     adress: '',
     ville: '',
     status: '',
-    title: '',
     categoryId: '',
     youtub: '',
     typeId: '',
@@ -229,7 +228,7 @@ const CreatePostForm = () => {
           </FormControl>
         </Grid>
 
-        <Grid item xs={6}>
+        {/* <Grid item xs={6}>
           <TextField
             margin="normal"
             required
@@ -239,7 +238,7 @@ const CreatePostForm = () => {
             value={formData.title}
             onChange={handleChange}
           />
-        </Grid>
+        </Grid> */}
 
         <Grid item xs={6}>
           <TextField
