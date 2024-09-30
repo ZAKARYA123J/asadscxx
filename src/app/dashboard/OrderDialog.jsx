@@ -59,7 +59,7 @@ const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
         },
         body: JSON.stringify(formattedCustomer),
       });
-
+console.log(response)
       if (!response.ok) {
         throw new Error('Failed to save the order');
       }
