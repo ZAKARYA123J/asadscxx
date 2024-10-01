@@ -106,7 +106,7 @@ const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
           onChange={handleChange}
         />
         {category === "Location" && (
-          <div style={{ display: "flex", alignItems: "center", gap: "20px", marginTop: '10px' }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "20px", marginTop: '10px',zIndex:"10" }}>
           <div style={{ flex: 1 }}>
             <InputLabel style={{ marginBottom: '5px' }}>Date Debut:</InputLabel>
             <DatePicker
@@ -115,12 +115,23 @@ const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
               dateFormat="yyyy-MM-dd"
               excludeDates={reservedDates} // Disable specific reserved dates
               className="date-picker"
+              popperProps={{
+                modifiers: [
+                  {
+                    name: 'zIndex',
+                    options: {
+                      zIndex: 1050, // Ensure the calendar stays above other elements
+                    },
+                  },
+                ],
+              }}
               customInput={
                 <TextField
                   fullWidth
                   variant="outlined"
                   margin="dense"
                   InputLabelProps={{ shrink: true }}
+                  style={{ backgroundColor: '#fff' }} // Set the background color
                 />
               }
             />
