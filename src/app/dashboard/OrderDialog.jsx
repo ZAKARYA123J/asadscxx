@@ -14,7 +14,7 @@ const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
     CIN: '',
     postId: selectedPostId || ''
   });
-  const { data, fetchData, fetchOrders } = useContext(DataContext);
+  const { data, fetchData, fetchOrders, order } = useContext(DataContext);
 
   useEffect(() => {
     if (selectedPostId) {
@@ -59,7 +59,6 @@ const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
         },
         body: JSON.stringify(formattedCustomer),
       });
-console.log(response)
       if (!response.ok) {
         throw new Error('Failed to save the order');
       }
@@ -79,22 +78,18 @@ console.log(response)
     }
   };
 
-  // Example array of dates to disable
-  const excludeDates = [
-    new Date('2024-12-25'), // Christmas
-    new Date('2024-01-01'), // New Year's Day
-    // Add more specific dates here
-  ];
-
-  // Alternatively, disable weekends (Saturday and Sunday)
-  const isWeekday = (date) => {
-    const day = date.getDay();
-    return day !== 0 && day !== 6;
-  };
+  // Example array of reserved dates for selected post
+  const filterOder = order.filter(item => item.postId === selectedPostId);
+  const reservedDates = filterOder.flatMap(item => item.reservedDates.map(date => new Date(date)));
 
   const filteredData = selectedPostId
     ? data.filter(item => item.id === selectedPostId)
     : data.filter(item => item.status !== 'unavailable' && item.status !== 'taken');
+  
+  // const isWeekday = (date) => {
+  //   const day = date.getDay();
+  //   return day !== 0 && day !== 6;
+  // };
 
   return (
     <Dialog open={open} onClose={onClose}>
@@ -111,14 +106,14 @@ console.log(response)
           onChange={handleChange}
         />
         {category === "Location" && (
-          <>
-            <InputLabel style={{ marginTop: '10px' }}>Date Debut</InputLabel>
+          <div style={{ display: "flex", alignItems: "center", gap: "20px", marginTop: '10px' }}>
+          <div style={{ flex: 1 }}>
+            <InputLabel style={{ marginBottom: '5px' }}>Date Debut:</InputLabel>
             <DatePicker
               selected={newCustomer.dateDebut}
               onChange={(date) => handleDateChange('dateDebut', date)}
               dateFormat="yyyy-MM-dd"
-              filterDate={isWeekday} // Disable weekends
-              excludeDates={excludeDates} // Disable specific dates
+              excludeDates={reservedDates} // Disable specific reserved dates
               className="date-picker"
               customInput={
                 <TextField
@@ -129,13 +124,14 @@ console.log(response)
                 />
               }
             />
-            <InputLabel style={{ marginTop: '10px' }}>Date Fine</InputLabel>
+          </div>
+          <div style={{ flex: 1 }}>
+            <InputLabel style={{ marginBottom: '5px' }}>Date Fine:</InputLabel>
             <DatePicker
               selected={newCustomer.dateFine}
               onChange={(date) => handleDateChange('dateFine', date)}
               dateFormat="yyyy-MM-dd"
-              filterDate={isWeekday} // Disable weekends
-              excludeDates={excludeDates} // Disable specific dates
+              excludeDates={reservedDates} // Disable specific reserved dates
               className="date-picker"
               customInput={
                 <TextField
@@ -146,7 +142,8 @@ console.log(response)
                 />
               }
             />
-          </>
+          </div>
+        </div>        
         )}
         <TextField
           margin="dense"
