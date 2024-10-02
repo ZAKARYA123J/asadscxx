@@ -23,11 +23,11 @@ const DetailForm = () => {
   const [detail, setDetail] = useState({
     constructionyear: "",
     surface: "",
-    rooms: "",
-    bedrooms: "", // Corrected here
-    livingrooms: "",
+    rooms: 0,
+    bedromms: 0, // Initialize with a number (0)
+    livingrooms: "", // Initialize with a number (0)
     kitchen: "",
-    bathrooms: "",
+    bathrooms: 0, // Initialize with a number (0)
     furnished: "",
     floor: "",
     elevator: "",
@@ -35,12 +35,12 @@ const DetailForm = () => {
     balcony: "",
     pool: "",
     facade: "",
-    Guard:"",
-    Proprietary:"",
+    Guard: "",
+    Proprietary: "",
     documents: "",
-    postId: Number(id) || 0,
-  });
-  
+    postId: Number(id) || 0, // Ensure postId is a number
+  });  
+ 
   // id               Int     @id @default(autoincrement())
   // constructionyear String?
   // surface          String?
@@ -73,7 +73,7 @@ const DetailForm = () => {
     e.preventDefault();
     setLoding(true)
     try {
-      const response = await fetch("https://immoceanrepo.vercel.app/api/details", {
+      const response = await fetch("http://localhost:3001/api/details", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -85,11 +85,11 @@ const DetailForm = () => {
         setDetail({
           constructionyear: "",
           surface: "",
-          rooms: "",
-          bedrooms: "",
-          livingrooms: "",
+          rooms: 0,
+          bedromms: 0, // Initialize with a number (0)
+          livingrooms: "", // Initialize with a number (0)
           kitchen: "",
-          bathrooms: "",
+          bathrooms: 0, // Initialize with a number (0)
           furnished: "",
           floor: "",
           elevator: "",
@@ -168,6 +168,7 @@ const DetailForm = () => {
               label="Bedrooms"
               name="bedromms" // Corrected from 'bedromms'
               value={detail.bedromms}
+              type="number"
               onChange={handleChange}
               variant="outlined"
             />
@@ -191,6 +192,7 @@ const DetailForm = () => {
               value={detail.livingrooms}
               onChange={handleChange}
               variant="outlined"
+               type="number"
             />
           </Grid>
 
@@ -213,6 +215,7 @@ const DetailForm = () => {
               value={detail.bathrooms}
               onChange={handleChange}
               variant="outlined"
+               type="number"
             />
           </Grid>
 

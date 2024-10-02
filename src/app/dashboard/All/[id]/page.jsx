@@ -30,10 +30,10 @@ const UpdateALL = () => {
     constructionyear:'',
     surface:"",
     rooms:"",
-    bedromms:"",
-    livingrooms:"",
-    kitchen:"",
-    bathrooms:"",
+    bedrooms: 0, // Initialize with a number (0)
+    livingrooms: 0, // Initialize with a number (0)
+    kitchen: "",
+    bathrooms: 0, // Initialize with a number (0)
     furnished:"",
     floor:"",
     elevator:"",
