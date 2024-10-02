@@ -23,11 +23,11 @@ const DetailForm = () => {
   const [detail, setDetail] = useState({
     constructionyear: "",
     surface: "",
-    rooms: 0,
-    bedromms: 0, // Initialize with a number (0)
+    rooms: null,
+    bedromms: null, // Initialize with a number (0)
     livingrooms: "", // Initialize with a number (0)
     kitchen: "",
-    bathrooms: 0, // Initialize with a number (0)
+    bathrooms: null, // Initialize with a number (0)
     furnished: "",
     floor: "",
     elevator: "",
@@ -38,36 +38,21 @@ const DetailForm = () => {
     Guard: "",
     Proprietary: "",
     documents: "",
-    postId: Number(id) || 0, // Ensure postId is a number
-  });  
- 
-  // id               Int     @id @default(autoincrement())
-  // constructionyear String?
-  // surface          String?
-  // rooms            String?
-  // bedromms         String?
-  // livingrooms      String?
-  // kitchen          String?
-  // bathrooms        String?
-  // furnished        String?
-  // floor            String?        
-  // elevator         String?
-  // parking          String?
-  // balcony          String?
-  // pool             String?
-  // facade           String?
-  // documents        String?
-  // postId           Int     @unique
-  // post             Post    @relation(fields: [postId], references: [id])
-  // Guard            String?  // New column
-  // Proprietary      String?  // New column
+    postId: Number(id) || 0, 
+  }); 
   const handleChange = (e) => {
     const { name, value } = e.target;
+  
+    // Convert specific fields to numbers
+    const numericFields = ["rooms", "bedromms", "bathrooms"];
+    const newValue = numericFields.includes(name) ? Number(value) : value;
+  
     setDetail((prevDetail) => ({
       ...prevDetail,
-      [name]: value,
+      [name]: newValue,
     }));
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -85,11 +70,11 @@ const DetailForm = () => {
         setDetail({
           constructionyear: "",
           surface: "",
-          rooms: 0,
-          bedromms: 0, // Initialize with a number (0)
+          rooms: null,
+          bedromms: null, // Initialize with a number (0)
           livingrooms: "", // Initialize with a number (0)
           kitchen: "",
-          bathrooms: 0, // Initialize with a number (0)
+          bathrooms: null, // Initialize with a number (0)
           furnished: "",
           floor: "",
           elevator: "",
@@ -158,6 +143,7 @@ const DetailForm = () => {
               value={detail.rooms}
               onChange={handleChange}
               variant="outlined"
+              type="number"
             />
           </Grid>
 
