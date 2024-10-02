@@ -29,9 +29,9 @@ const UpdateALL = () => {
     img: [],
     constructionyear:'',
     surface:"",
-    rooms:"",
+    rooms:0,
     bedrooms: 0, // Initialize with a number (0)
-    livingrooms: 0, // Initialize with a number (0)
+    livingrooms: "", // Initialize with a number (0)   
     kitchen: "",
     bathrooms: 0, // Initialize with a number (0)
     furnished:"",
@@ -46,6 +46,7 @@ const UpdateALL = () => {
     Guard:"",
     id: id
   });
+
 const router=useRouter()
   const [response, setResponse] = useState(null);
   const [errors, setErrors] = useState(null);
