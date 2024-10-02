@@ -28,7 +28,7 @@ export default function Page() {
  
 
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={2}>
       <CardComponent
         title="Budget Details"
         content={<p>Budget: $24k<br />Trend: Up 12%</p>}
@@ -56,7 +56,6 @@ export default function Page() {
       <CardComponent
         title="Total Profit Details"
         content={<p>Total Profit: $15k</p>}
-       
       >
         <TotalProfit sx={{ height: '100%' }} value="$15k" />
       </CardComponent>

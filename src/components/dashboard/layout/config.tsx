@@ -10,7 +10,6 @@ export const navItems: NavItemConfig[] = [
   { key: 'integrations', title: 'Orders', href: '/dashboard/orders', icon: 'plugs-connected' },
   // { key: 'settings', title: 'Settings', href: '/dashboard/settings', icon: 'gear-six' },
   // { key: 'account', title: 'Account', href: '/dashboard/account', icon: 'user' },
-
 ];
 
 // Define the navigation component

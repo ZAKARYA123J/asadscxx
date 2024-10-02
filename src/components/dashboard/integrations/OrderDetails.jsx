@@ -27,10 +27,10 @@ const OrderDetails = ({ orderId }) => {
   };
 
   return (
-    <Box sx={{ padding: 3 }}>
-      <Typography variant="h4" gutterBottom>
+    <Box sx={{ padding: 2 }}>
+      <p className="font-bold">
         Order Details
-      </Typography>
+      </p>
       <Typography variant="subtitle1" gutterBottom>
         Order ID: {orderId}
       </Typography>
@@ -38,7 +38,7 @@ const OrderDetails = ({ orderId }) => {
       {/* Display the filtered order details */}
       {filteredOrder && filteredOrder.length > 0 ? (
         filteredOrder.map((item) => (
-          <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }} key={item.id}>
+          <Paper elevation={3} sx={{ padding: 2}} key={item.id}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Typography variant="body1">

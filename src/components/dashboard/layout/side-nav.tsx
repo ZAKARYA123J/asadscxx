@@ -4,22 +4,45 @@ import * as React from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import Box from '@mui/material/Box';
-
+import { IoLogOutOutline } from "react-icons/io5";
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-
-
 import type { NavItemConfig } from '@/types/nav';
-
 import { isNavItemActive } from '@/lib/is-nav-item-active';
-
-
 import { navItems } from './config';
 import { navIcons } from './nav-icons';
+import { useRouter } from 'next/navigation';
+import { Button } from '@mui/material';
 
 export function SideNav(): React.JSX.Element {
   const pathname = usePathname();
+  const router = useRouter(); // Use Next.js router for page navigation
+  const [openLogoutModal, setOpenLogoutModal] = React.useState<boolean>(false);
+  const mainContentRef = React.useRef<HTMLDivElement>(null);
+
+  const handleLogout = (): void => {
+    Cookies.remove('token'); // Remove the token from cookies
+    router.refresh(); // Refresh the page
+  };
+  const handleOpenLogoutModal = (): void => {
+    setOpenLogoutModal(true); // Open the logout confirmation modal
+    if (mainContentRef.current) {
+      mainContentRef.current.setAttribute('inert', ''); // Apply inert attribute to the main content
+    }
+  };
+
+  const handleCloseLogoutModal = (): void => {
+    setOpenLogoutModal(false); // Close the logout confirmation modal
+    if (mainContentRef.current) {
+      mainContentRef.current.removeAttribute('inert'); // Remove inert attribute when modal is closed
+    }
+  };
+
+  const confirmLogout = (): void => {
+    handleLogout(); // Call logout logic
+    handleCloseLogoutModal(); // Close the modal after logout
+  };
 
   return (
     <Box
@@ -50,14 +73,10 @@ export function SideNav(): React.JSX.Element {
       }}
     >
       <Stack spacing={2} sx={{ p: 3 }}>
-        {/* <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
-          <Logo color="light" height={32} width={122} />
-        </Box> */}
         <Box
           sx={{
             alignItems: 'center',
-            // backgroundColor: 'var(--mui-palette-neutral-950)',
-            // border: '1px solid var(--mui-palette-neutral-700)',
+
             borderRadius: '12px',
             cursor: 'pointer',
             display: 'flex',
@@ -66,49 +85,21 @@ export function SideNav(): React.JSX.Element {
         >
           <Box sx={{ flex: '1 1 auto' }}>
             <Typography  variant="h3">
-            IMMOCEAN
+              IMMOCEAN
             </Typography>
-            {/* <Typography color="inherit" variant="subtitle1">
-              Devias
-            </Typography> */}
+
           </Box>
-          {/* <CaretUpDownIcon /> */}
         </Box>
       </Stack>
       <Divider sx={{ borderColor: 'var(--mui-palette-neutral-700)' }} />
       <Box component="nav" sx={{ flex: '1 1 auto', p: '12px' }}>
         {renderNavItems({ pathname, items: navItems })}
       </Box>
-      <Divider sx={{ borderColor: 'var(--mui-palette-neutral-700)' }} />
-      {/* <Stack spacing={2} sx={{ p: '12px' }}>
-        <div>
-          <Typography color="var(--mui-palette-neutral-100)" variant="subtitle2">
-            Need more features?
-          </Typography>
-          <Typography color="var(--mui-palette-neutral-400)" variant="body2">
-            Check out our Pro solution template.
-          </Typography>
-        </div>
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Box
-            component="img"
-            alt="Pro version"
-            src="/assets/devias-kit-pro.png"
-            sx={{ height: 'auto', width: '160px' }}
-          />
-        </Box>
-        <Button
-          component="a"
-          endIcon={<ArrowSquareUpRightIcon fontSize="var(--icon-fontSize-md)" />}
-          fullWidth
-          href="https://material-kit-pro-react.devias.io/"
-          sx={{ mt: 2 }}
-          target="_blank"
-          variant="contained"
-        >
-          Pro version
+      <Stack spacing={2} sx={{ p: '12px' }}>
+        <Button variant="contained" color="primary" onClick={handleOpenLogoutModal}>
+          <IoLogOutOutline fontSize={25}/>
         </Button>
-      </Stack> */}
+      </Stack>
     </Box>
   );
 }
