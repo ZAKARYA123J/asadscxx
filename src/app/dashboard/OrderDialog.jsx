@@ -3,7 +3,7 @@ import { Select, MenuItem, InputLabel, Dialog, DialogActions, DialogContent, Dia
 import { DataContext } from '@/contexts/post';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-
+import { useRouter } from 'next/navigation';
 const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
   const [loading, setLoading] = useState(false);
   const [newCustomer, setNewCustomer] = useState({
@@ -15,7 +15,7 @@ const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
     postId: selectedPostId || ''
   });
   const { data, fetchData, fetchOrders, order } = useContext(DataContext);
-
+const router=useRouter()
   useEffect(() => {
     if (selectedPostId) {
       setNewCustomer(prevState => ({
@@ -65,12 +65,13 @@ const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
 
       const result = await response.json();
       console.log('Order saved successfully:', result);
-
+      router.push("/dashboard/orders")
       // Fetch updated data after the successful save
       await fetchOrders();
       await fetchData();
 
       onClose(); // Close the dialog after successful save
+      
     } catch (error) {
       console.error('Error saving order:', error);
     } finally {
