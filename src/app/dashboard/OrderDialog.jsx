@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Select, MenuItem, InputLabel, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button ,CircularProgress} from '@mui/material';
+import { Select, MenuItem, InputLabel, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, CircularProgress } from '@mui/material';
 import { DataContext } from '@/contexts/post';
-
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { useRouter } from 'next/navigation';
 const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
   const [loading, setLoading] = useState(false);
   const [newCustomer, setNewCustomer] = useState({
@@ -12,8 +14,8 @@ const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
     CIN: '',
     postId: selectedPostId || ''
   });
-  const { data,fetchData ,fetchOrders} = useContext(DataContext);
-
+  const { data, fetchData, fetchOrders, order } = useContext(DataContext);
+const router=useRouter()
   useEffect(() => {
     if (selectedPostId) {
       setNewCustomer(prevState => ({
@@ -30,19 +32,26 @@ const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
     });
   };
 
+  const handleDateChange = (name, date) => {
+    setNewCustomer(prevState => ({
+      ...prevState,
+      [name]: date,
+    }));
+  };
+
   const handlePostChange = (event) => {
     setNewCustomer({ ...newCustomer, postId: event.target.value });
   };
 
   const handleSave = async () => {
-    setLoading(true); 
+    setLoading(true);
     try {
       const formattedCustomer = {
         ...newCustomer,
         dateDebut: newCustomer.dateDebut ? new Date(newCustomer.dateDebut).toISOString() : '',
         dateFine: newCustomer.dateFine ? new Date(newCustomer.dateFine).toISOString() : '',
       };
-  
+
       const response = await fetch('https://immoceanrepo.vercel.app/api/DateReserve', {
         method: 'POST',
         headers: {
@@ -50,19 +59,19 @@ const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
         },
         body: JSON.stringify(formattedCustomer),
       });
-  
       if (!response.ok) {
         throw new Error('Failed to save the order');
       }
-  
+
       const result = await response.json();
       console.log('Order saved successfully:', result);
-  
+      router.push("/dashboard/orders")
       // Fetch updated data after the successful save
       await fetchOrders();
       await fetchData();
-      
+
       onClose(); // Close the dialog after successful save
+      
     } catch (error) {
       console.error('Error saving order:', error);
     } finally {
@@ -70,9 +79,19 @@ const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
     }
   };
 
+  // Example array of reserved dates for selected post
+  const filterOder = order.filter(item => item.postId === selectedPostId);
+  const reservedDates = filterOder.flatMap(item => item.reservedDates.map(date => new Date(date)));
+
   const filteredData = selectedPostId
     ? data.filter(item => item.id === selectedPostId)
     : data.filter(item => item.status !== 'unavailable' && item.status !== 'taken');
+  
+  // const isWeekday = (date) => {
+  //   const day = date.getDay();
+  //   return day !== 0 && day !== 6;
+  // };
+
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Add New Order</DialogTitle>
@@ -88,30 +107,55 @@ const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
           onChange={handleChange}
         />
         {category === "Location" && (
-          <>
-            <TextField
-              margin="dense"
-              label="Date Debut"
-              name="dateDebut"
-              type="date"
-              fullWidth
-              variant="outlined"
-              value={newCustomer.dateDebut}
-              onChange={handleChange}
-              InputLabelProps={{ shrink: true }}
+          <div style={{ display: "flex", alignItems: "center", gap: "20px", marginTop: '10px',zIndex:"10" }}>
+          <div style={{ flex: 1 }}>
+            <InputLabel style={{ marginBottom: '5px' }}>Date Debut:</InputLabel>
+            <DatePicker
+              selected={newCustomer.dateDebut}
+              onChange={(date) => handleDateChange('dateDebut', date)}
+              dateFormat="yyyy-MM-dd"
+              excludeDates={reservedDates} // Disable specific reserved dates
+              className="date-picker"
+              popperProps={{
+                modifiers: [
+                  {
+                    name: 'zIndex',
+                    options: {
+                      zIndex: 1050, // Ensure the calendar stays above other elements
+                    },
+                  },
+                ],
+              }}
+              customInput={
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  margin="dense"
+                  InputLabelProps={{ shrink: true }}
+                  style={{ backgroundColor: '#fff' }} // Set the background color
+                />
+              }
             />
-            <TextField
-              margin="dense"
-              label="Date Fine"
-              name="dateFine"
-              type="date"
-              fullWidth
-              variant="outlined"
-              value={newCustomer.dateFine}
-              onChange={handleChange}
-              InputLabelProps={{ shrink: true }}
+          </div>
+          <div style={{ flex: 1 }}>
+            <InputLabel style={{ marginBottom: '5px' }}>Date Fine:</InputLabel>
+            <DatePicker
+              selected={newCustomer.dateFine}
+              onChange={(date) => handleDateChange('dateFine', date)}
+              dateFormat="yyyy-MM-dd"
+              excludeDates={reservedDates} // Disable specific reserved dates
+              className="date-picker"
+              customInput={
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  margin="dense"
+                  InputLabelProps={{ shrink: true }}
+                />
+              }
             />
-          </>
+          </div>
+        </div>        
         )}
         <TextField
           margin="dense"
@@ -132,11 +176,10 @@ const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
           value={newCustomer.price}
           onChange={handleChange}
         />
-        <InputLabel style={{ marginLeft: '10px' }}>Select Available Post</InputLabel>
+        <InputLabel style={{ marginLeft: '10px', marginTop: '10px' }}>Select Available Post</InputLabel>
         <Select
           fullWidth
           variant="outlined"
-          label="Post"
           value={newCustomer.postId}
           onChange={handlePostChange}
         >

@@ -129,7 +129,7 @@ const DataTable = () => {
     setSelectedPostId(postId);
     setSelectedPostCategory(category); // Set selectedPostCategory
     setDialogOpen(true);
-   
+ 
   };
 
   const getStatusIcon = (status) => {
@@ -281,11 +281,15 @@ const DataTable = () => {
                   <TableCell>{getStatusIcon(row.status)}</TableCell>
                   <TableCell >
   <div style={{ display: 'flex', alignItems: 'center' ,justifyContent: 'flex-end'}}>
-    {row.status === "taken" || row.status === "unavailable" ? (
-      row.DateReserve ? (
-        <span style={{ color: 'black' }}> <Typography variant="body1" color="error">
-       {calculateTotalDuration(row.DateReserve.dateDebut, row.DateReserve.dateFine)} Days 
-      </Typography></span>
+    {(row.status === "taken" && row.categoryId === 1) || row.status === "unavailable" ? (
+      row.DateReserve && Array.isArray(row.DateReserve) ? (
+        row.DateReserve.map((reserve) => (
+          <span key={reserve.id} style={{ color: 'black' }}>
+            <Typography variant="body1" color="error">
+             Id:{reserve.id}  
+            </Typography>
+          </span>
+        ))
       ) : (
         <span style={{ color: 'red' }}>Taken</span>
       )
@@ -295,7 +299,6 @@ const DataTable = () => {
       </IconButton>
     )}
     <div style={{ display: 'flex', alignItems: 'center' }}>
-    
       <IconButton onClick={() => handleDetail(row.id, row.Detail)}>
         <InfoIcon />
       </IconButton>

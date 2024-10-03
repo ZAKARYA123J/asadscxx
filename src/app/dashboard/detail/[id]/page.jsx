@@ -23,11 +23,11 @@ const DetailForm = () => {
   const [detail, setDetail] = useState({
     constructionyear: "",
     surface: "",
-    rooms: "",
-    bedrooms: "", // Corrected here
-    livingrooms: "",
+    rooms: null,
+    bedromms: null, // Initialize with a number (0)
+    livingrooms: "", // Initialize with a number (0)
     kitchen: "",
-    bathrooms: "",
+    bathrooms: null, // Initialize with a number (0)
     furnished: "",
     floor: "",
     elevator: "",
@@ -35,39 +35,24 @@ const DetailForm = () => {
     balcony: "",
     pool: "",
     facade: "",
-    Guard:"",
-    Proprietary:"",
+    Guard: "",
+    Proprietary: "",
     documents: "",
-    postId: Number(id) || 0,
-  });
-  
-  // id               Int     @id @default(autoincrement())
-  // constructionyear String?
-  // surface          String?
-  // rooms            String?
-  // bedromms         String?
-  // livingrooms      String?
-  // kitchen          String?
-  // bathrooms        String?
-  // furnished        String?
-  // floor            String?        
-  // elevator         String?
-  // parking          String?
-  // balcony          String?
-  // pool             String?
-  // facade           String?
-  // documents        String?
-  // postId           Int     @unique
-  // post             Post    @relation(fields: [postId], references: [id])
-  // Guard            String?  // New column
-  // Proprietary      String?  // New column
+    postId: Number(id) || 0, 
+  }); 
   const handleChange = (e) => {
     const { name, value } = e.target;
+  
+    // Convert specific fields to numbers
+    const numericFields = ["rooms", "bedromms", "bathrooms"];
+    const newValue = numericFields.includes(name) ? Number(value) : value;
+  
     setDetail((prevDetail) => ({
       ...prevDetail,
-      [name]: value,
+      [name]: newValue,
     }));
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -85,11 +70,11 @@ const DetailForm = () => {
         setDetail({
           constructionyear: "",
           surface: "",
-          rooms: "",
-          bedrooms: "",
-          livingrooms: "",
+          rooms: null,
+          bedromms: null, // Initialize with a number (0)
+          livingrooms: "", // Initialize with a number (0)
           kitchen: "",
-          bathrooms: "",
+          bathrooms: null, // Initialize with a number (0)
           furnished: "",
           floor: "",
           elevator: "",
@@ -139,7 +124,6 @@ const DetailForm = () => {
               variant="outlined"
             />
           </Grid>
-
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
@@ -159,6 +143,7 @@ const DetailForm = () => {
               value={detail.rooms}
               onChange={handleChange}
               variant="outlined"
+              type="number"
             />
           </Grid>
 
@@ -168,6 +153,7 @@ const DetailForm = () => {
               label="Bedrooms"
               name="bedromms" // Corrected from 'bedromms'
               value={detail.bedromms}
+              type="number"
               onChange={handleChange}
               variant="outlined"
             />
@@ -191,6 +177,7 @@ const DetailForm = () => {
               value={detail.livingrooms}
               onChange={handleChange}
               variant="outlined"
+               type="number"
             />
           </Grid>
 
@@ -213,6 +200,7 @@ const DetailForm = () => {
               value={detail.bathrooms}
               onChange={handleChange}
               variant="outlined"
+               type="number"
             />
           </Grid>
 
@@ -340,7 +328,7 @@ const DetailForm = () => {
           </Grid>
 
           <Grid item xs={12}>
-            <Button variant="contained" color="primary" type="submit">
+            <Button variant="contained" color="primary" type="submit" disabled={loiding}>
               {loiding ? <CircularProgress size={24}/> : "Insert"}
             </Button>
           </Grid>

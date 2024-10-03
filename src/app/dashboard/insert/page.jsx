@@ -26,7 +26,6 @@ const CreatePostForm = () => {
     adress: '',
     ville: '',
     status: '',
-    title: '',
     categoryId: '',
     youtub: '',
     typeId: '',
@@ -79,7 +78,7 @@ const CreatePostForm = () => {
 
 
     try {
-      const response = await fetch('https://immoceanrepo.vercel.app/api/posts', {
+      const response = await fetch('http://localhost:3000/api/posts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -229,7 +228,7 @@ const CreatePostForm = () => {
           </FormControl>
         </Grid>
 
-        <Grid item xs={6}>
+        {/* <Grid item xs={6}>
           <TextField
             margin="normal"
             required
@@ -239,7 +238,7 @@ const CreatePostForm = () => {
             value={formData.title}
             onChange={handleChange}
           />
-        </Grid>
+        </Grid> */}
 
         <Grid item xs={6}>
           <TextField
