@@ -6,7 +6,7 @@ import { DataContext } from '@/contexts/post';
 import { CompaniesFilters } from '@/components/dashboard/integrations/integrations-filters';
 import AddOrderDialog from '../OrderDialog';
 
-export default function Page() {
+ const Page=React.memo( function Page() {
   const { createOrder, updateOrder,fetchOrders } = useContext(DataContext);
 
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -58,4 +58,6 @@ export default function Page() {
       </Box> */}
     </Stack>
   );
-}
+})
+
+export default Page

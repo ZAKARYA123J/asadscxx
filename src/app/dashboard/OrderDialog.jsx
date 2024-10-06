@@ -4,7 +4,7 @@ import { DataContext } from '@/contexts/post';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useRouter } from 'next/navigation';
-const AddOrderDialog = ({ open, onClose, selectedPostId, category }) => {
+const AddOrderDialog = React.memo(({ open, onClose, selectedPostId, category }) => {
   const [loading, setLoading] = useState(false);
   const [newCustomer, setNewCustomer] = useState({
     fullName: '',
@@ -201,6 +201,6 @@ const router=useRouter()
       </DialogActions>
     </Dialog>
   );
-};
+});
 
 export default AddOrderDialog;

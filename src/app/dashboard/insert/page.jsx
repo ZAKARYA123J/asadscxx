@@ -17,7 +17,7 @@ import axios from 'axios';
 
 // Fix for default marker icon in Leaflet
 
-const CreatePostForm = () => {
+const CreatePostForm = React.memo(() => {
   const [formData, setFormData] = useState({
     lat: '',
     lon: '',
@@ -347,6 +347,6 @@ const CreatePostForm = () => {
 
     </>
   );
-};
+});
 
 export default CreatePostForm;

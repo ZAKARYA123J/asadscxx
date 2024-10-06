@@ -18,7 +18,7 @@ import { useRouter } from 'next/navigation';
 import { MdAddCard } from "react-icons/md";
 import AddOrderDialog from '../OrderDialog';
 import { FcSearch } from "react-icons/fc";
-const DataTable = () => {
+const DataTable =React.memo( () => {
   const { data, loading, error,fetchData,fetchOrders} = useContext(DataContext);
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
@@ -376,6 +376,6 @@ const DataTable = () => {
       />
     </>
   );
-};
+});
 
 export default DataTable;

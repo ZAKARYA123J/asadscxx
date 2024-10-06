@@ -21,7 +21,7 @@ export default function Layout({ children }: LayoutProps): React.JSX.Element {
             <ThemeProvider>{children}</ThemeProvider>
            </DataProvider> 
         </LocalizationProvider>
-        <SpeedInsights />
+        <SpeedInsights/>
       </body>
     </html>
   );
