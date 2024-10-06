@@ -187,8 +187,18 @@ const CreatePostForm = () => {
             value={formData.prix}
             onChange={handleChange}
           />
-        </Grid>
-
+        
+                  <Select
+                    name="priceType"
+                    value={formData.prix}
+                    onChange={handleChange}
+                    label="Price Type"
+                  >
+                    <MenuItem value="jour">Per Day</MenuItem>
+                    <MenuItem value="mois">Per Month</MenuItem>
+                  </Select>
+               
+              </Grid>
         <Grid item xs={6}>
           <TextField
             margin="normal"
