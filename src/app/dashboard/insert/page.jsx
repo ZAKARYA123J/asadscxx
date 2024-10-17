@@ -3,6 +3,7 @@ import React, { useState, useContext } from 'react';
 import { TextField, Button, Typography, Box, Alert, MenuItem, Select, InputLabel, FormControl, Grid, Card, CardMedia ,CircularProgress} from '@mui/material';
 import dynamic from 'next/dynamic';
 import { GrLinkNext } from "react-icons/gr";
+import imageCompression from 'browser-image-compression';
 const MyMap = dynamic(
   () => import('./MapComponent'),
   { 
@@ -10,10 +11,8 @@ const MyMap = dynamic(
     ssr: false  // Disable server-side rendering
   }
 );
-
 import { DataContext } from '@/contexts/post';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
 
 // Fix for default marker icon in Leaflet
 
@@ -49,27 +48,42 @@ const CreatePostForm = React.memo(() => {
     }));
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const files = Array.from(e.target.files);
-    setImageCount(files.length);
-    // Convert each file to a base64 string
-    Promise.all(
-      files.map((file) => {
-        return new Promise((resolve, reject) => {
+    const compressedImages = [];
+  
+    for (const file of files) {
+      try {
+        // Options for image compression
+        const options = {
+          maxSizeMB: 2,       // Maximum file size in MB
+          maxWidthOrHeight: 1920, // Maximum width or height
+          useWebWorker: true, // Use web worker for faster compression
+        };
+  
+        // Compress the image
+        const compressedFile = await imageCompression(file, options);
+  
+        // Convert compressed file to base64 string
+        const base64Image = await new Promise((resolve, reject) => {
           const reader = new FileReader();
           reader.onloadend = () => resolve(reader.result);
           reader.onerror = reject;
-          reader.readAsDataURL(file);
+          reader.readAsDataURL(compressedFile);
         });
-      })
-    )
-      .then((base64Images) => {
-        setFormData((prevData) => ({
-          ...prevData,
-          img: base64Images,
-        }));
-      })
-      .catch((error) => console.error('Error converting images:', error));
+  
+        compressedImages.push(base64Image);
+      } catch (error) {
+        console.error('Error compressing image:', error);
+      }
+    }
+  
+    // Update form data with compressed images
+    setImageCount(compressedImages.length);
+    setFormData((prevData) => ({
+      ...prevData,
+      img: compressedImages,
+    }));
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -78,7 +92,7 @@ const CreatePostForm = React.memo(() => {
 
 
     try {
-      const response = await fetch('http://localhost:3000/api/posts', {
+      const response = await fetch('https://immoceanrepo.vercel.app/api/posts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -102,51 +116,7 @@ const CreatePostForm = React.memo(() => {
       setErrors({ error: 'An error occurred while creating the post' });
       setLoading(false); // Stop loading on success
     }
-  };
-
-  // const handleSearch = async () => {
-  //   try {
-  //     const apiKey = 'af85006391dc49f8b68717cb9c1d0e60'; // Replace with your OpenCage API key
-  //     const response = await axios.get(
-  //       `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(searchAddress)}&key=${apiKey}`
-  //     );
-
-  //     const data = response.data;
-  //     if (data.results.length > 0) {
-  //       const { lat, lng } = data.results[0].geometry;
-  //       setFormData((prevData) => ({
-  //         ...prevData,
-  //         lat,
-  //         lon: lng,
-  //       }));
-  //     } else {
-  //       setErrors({ search: 'Address not found' });
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching geocoding data:', error);
-  //     setErrors({ search: 'Failed to fetch geocoding data' });
-  //   }
-  // };
-
-  // const LocationMarker = () => {
-  //   const map = useMapEvents({
-  //     click(e) {
-  //       const { lat, lng } = e.latlng;
-  //       setFormData((prevData) => ({
-  //         ...prevData,
-  //         lat,
-  //         lon: lng,
-  //       }));
-  //       map.flyTo(e.latlng, map.getZoom());
-  //     },
-  //   });
-
-  //   return formData.lat !== 0 && formData.lon !== 0 ? (
-  //     <Marker position={[formData.lat, formData.lon]} />
-  //   ) : null;
-  // };
-
- 
+  }; 
   return (
     <>
       <Typography variant="h4" component="h1" gutterBottom>
@@ -187,16 +157,6 @@ const CreatePostForm = React.memo(() => {
             value={formData.prix}
             onChange={handleChange}
           />
-        
-                  <Select
-                    name="priceType"
-                    value={formData.prix}
-                    onChange={handleChange}
-                    label="Price Type"
-                  >
-                    <MenuItem value="jour">Per Day</MenuItem>
-                    <MenuItem value="mois">Per Month</MenuItem>
-                  </Select>
                
               </Grid>
         <Grid item xs={6}>
