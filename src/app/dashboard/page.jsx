@@ -16,7 +16,6 @@ const CardComponent = ({ children }) => {
     <StyledGrid lg={4} sm={6} xs={12}>
       <div style={{
         backgroundColor: 'white',
-     
         padding: '16px',
         height: '100%',
       }}>
@@ -41,9 +40,9 @@ export default function Page() {
         <TotalProfit sx={{ height: '100%' }} value="$15k" />
       </CardComponent>
 
-      {/* <Grid >
+      <StyledGrid xs={12}>
         <LatestOrders />
-      </Grid> */}
+      </StyledGrid>
     </StyledGrid>
   );
 }
