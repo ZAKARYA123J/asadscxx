@@ -1,54 +1,59 @@
 import * as React from 'react';
-
+import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
-import type { SxProps } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import Avatar from '@mui/material/Avatar';
+import CurrencyDollarIcon from '@mui/icons-material/AttachMoney';
+import type { SxProps } from '@mui/material/styles';
 import { DataContext } from '@/contexts/post';
 
 export interface BudgetProps {
-
   trend: 'up' | 'down';
   sx?: SxProps;
- 
-
 }
-export function Budget({   sx }: BudgetProps): React.JSX.Element {
-const {data}=React.useContext(DataContext)
 
-const filteredOrders = data?.filter((item:any) => item?.categoryId === 1) || [];
-const filteredLocatio = data?.filter((item:any) => item?.categoryId === 2) || [];
+const StyledCard = styled(Card)<{ trend: 'up' | 'down' }>(
+  ({ theme, trend }) => ({
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(2),
+  })
+);
+
+const StyledAvatar = styled(Avatar)(({ theme }) => ({
+  backgroundColor: theme.palette.primary.main,
+  height: 40,
+  width: 40,
+}));
+
+const TotalTypography = styled(Typography)(({ theme }) => ({
+  fontWeight: 'bold',
+  color: theme.palette.text.primary,
+}));
+
+export function Budget({ trend, sx }: BudgetProps): React.JSX.Element {
+  const { data } = React.useContext(DataContext);
+  const filteredOrders = data?.filter((item: any) => item?.categoryId === 1) || [];
+  const filteredLocation = data?.filter((item: any) => item?.categoryId === 2) || [];
+
   return (
-    <Card sx={sx}>
+    <StyledCard trend={trend} sx={sx}>
       <CardContent>
-        <Stack spacing={3}>
+        <Stack spacing={2}>
           <Stack direction="row" sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }} spacing={3}>
             <Stack spacing={1}>
-              <Typography variant="h4">Total :</Typography>
-              <Typography variant="h6">-{data?.length || 0} Posts</Typography>
-              <Typography variant="h6">-{filteredOrders?.length || 0} Vente</Typography>
-              <Typography variant="h6">-{filteredLocatio?.length || 0} Location</Typography>
+              <TotalTypography variant="h4">Total:</TotalTypography>
+              <Typography>{data?.length || 0} Posts</Typography>
+              <Typography>{filteredOrders?.length || 0} Vente</Typography>
+              <Typography>{filteredLocation?.length || 0} Location</Typography>
             </Stack>
-            {/* <Avatar sx={{ backgroundColor: 'var(--mui-palette-primary-main)', height: '56px', width: '56px' }}>
-              <CurrencyDollarIcon fontSize="var(--icon-fontSize-lg)" />
-            </Avatar> */}
+            <StyledAvatar>
+              <CurrencyDollarIcon />
+            </StyledAvatar>
           </Stack>
-          {/* {diff ? (
-            <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
-              <Stack sx={{ alignItems: 'center' }} direction="row" spacing={0.5}>
-                <TrendIcon color={trendColor} fontSize="var(--icon-fontSize-md)" />
-                <Typography color={trendColor} variant="body2">
-                  {diff}%
-                </Typography>
-              </Stack>
-              <Typography color="text.secondary" variant="caption">
-                Since last month
-              </Typography>
-            </Stack>
-          ) : null} */}
         </Stack>
       </CardContent>
-    </Card>
+    </StyledCard>
   );
 }
