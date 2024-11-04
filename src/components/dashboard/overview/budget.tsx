@@ -38,7 +38,7 @@ export function Budget({ trend, sx }: BudgetProps): React.JSX.Element {
   const filteredLocation = data?.filter((item: any) => item?.categoryId === 2) || [];
 
   return (
-    <StyledCard trend={trend} sx={sx}>
+    <StyledCard trend={trend} sx={sx} >
       <CardContent>
         <Stack spacing={2}>
           <Stack direction="row" sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }} spacing={3}>

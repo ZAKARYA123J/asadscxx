@@ -25,7 +25,7 @@ export function TotalProfit({ sx }) {
   const filteredLocation = order?.filter((item) => item?.post?.categoryId === 2) || [];
 
   return (
-    <StyledCard sx={sx}>
+    <StyledCard sx={sx} >
       <CardContent>
         <Stack direction="row" sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }} spacing={2}>
          
