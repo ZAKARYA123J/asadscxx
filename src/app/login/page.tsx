@@ -63,7 +63,11 @@ const Login: React.FC = () => {
       const data = await response.json();
       const { token } = data;
 
-      setCookie('token', token, { path: '/' });
+      setCookie('token', token, { 
+        path: '/', 
+        secure: true, 
+        sameSite: 'strict' 
+      });      
       router.push('/dashboard');
     } catch (error) {
       setError('Login failed. Please check your email and password and try again.');
